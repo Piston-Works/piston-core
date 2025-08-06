@@ -13,9 +13,6 @@ allprojects {
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
 
-    group = "org.pistonworks"
-    version = "0.0.1"
-
     repositories {
         mavenCentral()
         // Spigot repository for Bukkit/Spigot API
