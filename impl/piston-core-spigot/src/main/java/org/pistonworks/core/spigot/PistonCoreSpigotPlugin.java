@@ -3,17 +3,23 @@ package org.pistonworks.core.spigot;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.pistonworks.core.api.service.CommandService;
 import org.pistonworks.core.api.service.EventService;
-import org.pistonworks.core.api.service.LifecycleService;
 
-public final class PistonCoreSpigotPlugin extends JavaPlugin {
+public final class PistonCoreSpigotPlugin extends JavaPlugin
+{
 
     // A static reference to the main plugin instance. This is a common pattern for easy access.
     private static PistonCoreSpigotPlugin instance;
     private final PistonCoreSpigotServices services = new PistonCoreSpigotServices(this);
     private SpigotPlugin spigotPlugin;
 
+    public static PistonCoreSpigotPlugin getInstance()
+    {
+        return instance;
+    }
+
     @Override
-    public void onEnable() {
+    public void onEnable()
+    {
         instance = this;
 
         // Create SpigotPlugin
@@ -25,22 +31,21 @@ public final class PistonCoreSpigotPlugin extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable()
+    {
         // Call the lifecycle hook to let the core know it's being unloaded.
         services.getLifecycleService().onDisable(spigotPlugin);
         instance = null;
         getLogger().info("Piston Core Spigot implementation disabled!");
     }
 
-    public static PistonCoreSpigotPlugin getInstance() {
-        return instance;
-    }
-
-    public CommandService getCommandService() {
+    public CommandService getCommandService()
+    {
         return services.getCommandService();
     }
 
-    public EventService getEventService() {
+    public EventService getEventService()
+    {
         return services.getEventService();
     }
 }

@@ -6,7 +6,8 @@ import org.pistonworks.core.api.service.CommandService;
 import org.pistonworks.core.api.service.EventService;
 import org.pistonworks.core.api.service.LifecycleService;
 
-public final class PistonCoreSpigotServices implements PistonCoreServices {
+public final class PistonCoreSpigotServices implements PistonCoreServices
+{
 
     private final JavaPlugin plugin;
     private final SpigotPlugin spigotPlugin;
@@ -14,7 +15,8 @@ public final class PistonCoreSpigotServices implements PistonCoreServices {
     private final EventService eventService;
     private final LifecycleService lifecycleService;
 
-    public PistonCoreSpigotServices(JavaPlugin plugin) {
+    public PistonCoreSpigotServices(JavaPlugin plugin)
+    {
         this.plugin = plugin;
         this.spigotPlugin = new SpigotPlugin(plugin);
         this.commandService = new SpigotCommandServiceImpl(plugin);
@@ -23,22 +25,26 @@ public final class PistonCoreSpigotServices implements PistonCoreServices {
     }
 
     // Additional constructor for reflection-based initialization from API
-    public PistonCoreSpigotServices(Object plugin) {
+    public PistonCoreSpigotServices(Object plugin)
+    {
         this((JavaPlugin) plugin);
     }
 
     @Override
-    public CommandService getCommandService() {
+    public CommandService getCommandService()
+    {
         return this.commandService;
     }
 
     @Override
-    public EventService getEventService() {
+    public EventService getEventService()
+    {
         return this.eventService;
     }
 
     @Override
-    public LifecycleService getLifecycleService() {
+    public LifecycleService getLifecycleService()
+    {
         return this.lifecycleService;
     }
 }

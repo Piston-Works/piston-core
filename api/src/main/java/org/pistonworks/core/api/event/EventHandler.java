@@ -11,16 +11,19 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface EventHandler {
+public @interface EventHandler
+{
 
     /**
      * The priority of this event handler.
+     *
      * @return the priority
      */
     EventPriority priority() default EventPriority.NORMAL;
 
     /**
      * Whether this handler should receive cancelled events.
+     *
      * @return true to receive cancelled events
      */
     boolean ignoreCancelled() default true;

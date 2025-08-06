@@ -5,47 +5,59 @@ import org.pistonworks.core.api.service.EventService;
 import org.pistonworks.core.api.service.LifecycleService;
 
 // The central access point for all Piston Core services.
-public final class PistonCore {
+public final class PistonCore
+{
 
     private static PistonCoreServices services;
 
-    public static CommandService getCommandService() {
+    public static CommandService getCommandService()
+    {
         return getServices().getCommandService();
     }
 
-    public static EventService getEventService() {
+    public static EventService getEventService()
+    {
         return getServices().getEventService();
     }
 
-    public static LifecycleService getLifecycleService() {
+    public static LifecycleService getLifecycleService()
+    {
         return getServices().getLifecycleService();
     }
 
-    /**
-     * Manually set the services implementation. This should be called by the platform implementation.
-     * @param servicesImpl the platform-specific services implementation
-     */
-    public static void setServices(PistonCoreServices servicesImpl) {
-        services = servicesImpl;
-    }
-
-    private static PistonCoreServices getServices() {
-        if (services == null) {
+    private static PistonCoreServices getServices()
+    {
+        if (services == null)
+        {
             // Try to auto-detect and initialize platform services
             initializePlatformServices();
         }
 
-        if (services == null) {
+        if (services == null)
+        {
             throw new IllegalStateException("Piston Core services not initialized! Make sure a platform implementation is available.");
         }
 
         return services;
     }
 
-    private static void initializePlatformServices() {
+    /**
+     * Manually set the services implementation. This should be called by the platform implementation.
+     *
+     * @param servicesImpl the platform-specific services implementation
+     */
+    public static void setServices(PistonCoreServices servicesImpl)
+    {
+        services = servicesImpl;
+    }
+
+    private static void initializePlatformServices()
+    {
         // Try to detect and initialize Spigot services
-        if (isBukkitPlatform()) {
-            try {
+        if (isBukkitPlatform())
+        {
+            try
+            {
                 Class<?> spigotServicesClass = Class.forName("org.pistonworks.core.spigot.PistonCoreSpigotServices");
                 Class<?> pluginClass = Class.forName("org.pistonworks.core.spigot.PistonCoreSpigotPlugin");
 
@@ -54,10 +66,11 @@ public final class PistonCore {
 
                 // Create services with the plugin instance
                 services = (PistonCoreServices) spigotServicesClass
-                    .getConstructor(Object.class)
-                    .newInstance(pluginInstance);
+                        .getConstructor(Object.class)
+                        .newInstance(pluginInstance);
 
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 // Platform detection failed, services will remain null
                 // The calling code will handle this appropriately
             }
@@ -65,12 +78,15 @@ public final class PistonCore {
         // ... add other platforms here in the future ...
     }
 
-    private static boolean isBukkitPlatform() {
+    private static boolean isBukkitPlatform()
+    {
         // Checks for the existence of a core Bukkit class.
-        try {
+        try
+        {
             Class.forName("org.bukkit.Server");
             return true;
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e)
+        {
             return false;
         }
     }

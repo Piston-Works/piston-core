@@ -7,17 +7,20 @@ import org.pistonworks.core.api.event.EventPriority;
 /**
  * Wrapper for functional event listeners.
  */
-public class FunctionalRegisteredListener<T extends Event> extends RegisteredListener {
+public class FunctionalRegisteredListener<T extends Event> extends RegisteredListener
+{
 
     private final EventListener<T> listener;
 
-    public FunctionalRegisteredListener(EventListener<T> listener, EventPriority priority) {
+    public FunctionalRegisteredListener(EventListener<T> listener, EventPriority priority)
+    {
         super(listener, null, priority, true);
         this.listener = listener;
     }
 
     @Override
-    public void call(Event event) {
+    public void call(Event event)
+    {
         @SuppressWarnings("unchecked")
         T typedEvent = (T) event;
         listener.handle(typedEvent);

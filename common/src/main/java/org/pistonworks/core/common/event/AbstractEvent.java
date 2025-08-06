@@ -6,33 +6,39 @@ import org.pistonworks.core.api.event.Event;
  * Abstract base class for events providing common functionality.
  * This reduces boilerplate for concrete event implementations.
  */
-public abstract class AbstractEvent implements Event {
+public abstract class AbstractEvent implements Event
+{
 
     private final String eventName;
     private final long timestamp;
 
-    protected AbstractEvent() {
+    protected AbstractEvent()
+    {
         this.eventName = this.getClass().getSimpleName();
         this.timestamp = System.currentTimeMillis();
     }
 
-    protected AbstractEvent(String eventName) {
+    protected AbstractEvent(String eventName)
+    {
         this.eventName = eventName;
         this.timestamp = System.currentTimeMillis();
     }
 
     @Override
-    public String getEventName() {
+    public String getEventName()
+    {
         return eventName;
     }
 
     @Override
-    public long getTimestamp() {
+    public long getTimestamp()
+    {
         return timestamp;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return String.format("%s{timestamp=%d}", eventName, timestamp);
     }
 }

@@ -4,7 +4,8 @@ package org.pistonworks.core.api.event;
  * Represents the priority of an event listener.
  * Higher priority listeners are called first.
  */
-public enum EventPriority {
+public enum EventPriority
+{
     LOWEST(0),
     LOW(1),
     NORMAL(2),
@@ -14,11 +15,13 @@ public enum EventPriority {
 
     private final int value;
 
-    EventPriority(int value) {
+    EventPriority(int value)
+    {
         this.value = value;
     }
 
-    public int getValue() {
+    public int getValue()
+    {
         return value;
     }
 }

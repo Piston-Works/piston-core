@@ -8,14 +8,16 @@ import java.lang.reflect.Method;
 /**
  * Represents a registered event listener with metadata.
  */
-public class RegisteredListener {
+public class RegisteredListener
+{
 
     private final Object listener;
     private final Method method;
     private final EventPriority priority;
     private final boolean ignoreCancelled;
 
-    public RegisteredListener(Object listener, Method method, EventPriority priority, boolean ignoreCancelled) {
+    public RegisteredListener(Object listener, Method method, EventPriority priority, boolean ignoreCancelled)
+    {
         this.listener = listener;
         this.method = method;
         this.priority = priority;
@@ -23,28 +25,34 @@ public class RegisteredListener {
         this.method.setAccessible(true);
     }
 
-    public void call(Event event) throws Exception {
+    public void call(Event event) throws Exception
+    {
         method.invoke(listener, event);
     }
 
-    public EventPriority getPriority() {
+    public EventPriority getPriority()
+    {
         return priority;
     }
 
-    public boolean isIgnoreCancelled() {
+    public boolean isIgnoreCancelled()
+    {
         return ignoreCancelled;
     }
 
-    public Object getListener() {
+    public Object getListener()
+    {
         return listener;
     }
 
-    public Method getMethod() {
+    public Method getMethod()
+    {
         return method;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj)
+    {
         if (this == obj) return true;
         if (!(obj instanceof RegisteredListener)) return false;
         RegisteredListener other = (RegisteredListener) obj;
@@ -52,7 +60,8 @@ public class RegisteredListener {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return listener.hashCode() * 31 + method.hashCode();
     }
 }
