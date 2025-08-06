@@ -11,7 +11,26 @@ Forge, for creating server-side plugins (and mods that act like plugins).
 
 ## Quick Start
 
-### 1. Add the Gradle Plugin
+### 1. Configure Plugin Resolution
+
+First, create or update your `settings.gradle.kts` file to tell Gradle where to find the Piston Core plugin:
+
+```kotlin
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            url = uri("https://nexus.alecj.tk/repository/maven-releases/")
+        }
+    }
+}
+
+rootProject.name = "your-plugin-name"
+```
+
+**Important:** The `pluginManagement` block must be at the top of your `settings.gradle.kts` file, before any other configuration.
+
+### 2. Add the Gradle Plugin
 
 ```kotlin
 plugins {
@@ -29,7 +48,7 @@ group = "com.example"
 version = "1.0.0"
 ```
 
-### 2. Create Your Plugin
+### 3. Create Your Plugin
 
 ```java
 package com.example;
@@ -90,7 +109,7 @@ public class MyPlugin extends JavaPlugin {
 }
 ```
 
-### 3. Platform-Specific Setup
+### 4. Platform-Specific Setup
 
 The example above shows Spigot setup (extending `JavaPlugin`). For other platforms:
 
