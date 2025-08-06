@@ -24,3 +24,7 @@ The goal is to provide a unified API that works across different server software
 - ✅ Listening for events
 - ✅ Almost anything you could do with a Spigot plugin
 - ❌ This is **not** a modding framework, so you cannot create custom blocks, items, entities, etc.
+
+## Repositories
+
+https://nexus.alecj.tk/#browse/browse:maven-releases:org%2Fpistonworks
