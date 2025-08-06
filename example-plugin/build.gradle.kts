@@ -1,5 +1,5 @@
 plugins {
-    id("org.pistonworks.core") version "0.2.0"
+    id("org.pistonworks.core") version "0.3.0"
 }
 
 repositories {

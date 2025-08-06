@@ -22,3 +22,4 @@ dependencies {
     implementation(gradleApi())
     implementation("org.yaml:snakeyaml:2.0")
 }
+
