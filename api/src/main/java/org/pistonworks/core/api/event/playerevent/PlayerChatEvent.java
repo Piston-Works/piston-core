@@ -1,55 +1,35 @@
 package org.pistonworks.core.api.event.playerevent;
 
+import org.pistonworks.core.api.event.Cancellable;
 import org.pistonworks.core.api.model.Player;
 
 /**
- * Event fired when a player sends a chat message.
+ * Called when a player sends a chat message.
+ * This event is cancellable.
  */
-public class PlayerChatEvent extends PlayerEvent {
-
-    private String message;
-    private String format;
+public interface PlayerChatEvent extends PlayerEvent, Cancellable {
 
     /**
-     * Creates a new player chat event.
-     * @param player the player who sent the message
-     * @param message the chat message
-     * @param format the format string for the message
+     * Gets the message the player is sending.
+     * @return the chat message
      */
-    public PlayerChatEvent(Player player, String message) {
-        super(player);
-        this.message = message;
-    }
+    String getMessage();
 
     /**
-     * Gets the chat message.
-     * @return the message
+     * Sets the message the player is sending.
+     * @param message the new chat message
      */
-    public String getMessage() {
-        return message;
-    }
+    void setMessage(String message);
 
     /**
-     * Sets the chat message.
-     * @param message the new message
+     * Gets the format string used for this chat message.
+     * @return the format string (e.g., "&lt;%s&gt; %s")
      */
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    String getFormat();
 
     /**
-     * Gets the format string for the message.
-     * @return the format string
+     * Sets the format string used for this chat message.
+     * @param format the format string
      */
-    public String getFormat() {
-        return format;
-    }
-
-    /**
-     * Sets the format string for the message.
-     * @param format the new format string
-     */
-    public void setFormat(String format) {
-        this.format = format;
-    }
+    void setFormat(String format);
 }

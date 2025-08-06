@@ -3,35 +3,19 @@ package org.pistonworks.core.api.event.playerevent;
 import org.pistonworks.core.api.model.Player;
 
 /**
- * Event fired when a player joins the server.
+ * Called when a player joins the server.
  */
-public class PlayerJoinEvent extends PlayerEvent {
-
-    private String joinMessage;
+public interface PlayerJoinEvent extends PlayerEvent {
 
     /**
-     * Creates a new player join event.
-     * @param player the player who joined
-     * @param joinMessage the message to display when the player joins
+     * Gets the join message that will be displayed.
+     * @return the join message, or null if no message
      */
-    public PlayerJoinEvent(Player player, String joinMessage) {
-        super(player);
-        this.joinMessage = joinMessage;
-    }
+    String getJoinMessage();
 
     /**
-     * Gets the join message for this event.
-     * @return the join message
+     * Sets the join message to be displayed.
+     * @param message the join message, or null for no message
      */
-    public String getJoinMessage() {
-        return joinMessage;
-    }
-
-    /**
-     * Sets the join message for this event.
-     * @param joinMessage the new join message
-     */
-    public void setJoinMessage(String joinMessage) {
-        this.joinMessage = joinMessage;
-    }
+    void setJoinMessage(String message);
 }

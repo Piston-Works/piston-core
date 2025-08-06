@@ -1,42 +1,28 @@
 package org.pistonworks.core.api.event;
 
 /**
- * Base class for all events in the Piston Core system.
- * This provides common functionality that all events share.
+ * Base interface for all events in the Piston Core system.
+ * Events are immutable data objects that represent something that has happened or is about to happen.
  */
-public abstract class Event {
-
-    private boolean cancelled = false;
-    private final long timestamp;
+public interface Event {
 
     /**
-     * Creates a new event with the current timestamp.
+     * Gets the name of this event type.
+     * @return the event name
      */
-    protected Event() {
-        this.timestamp = System.currentTimeMillis();
-    }
+    String getEventName();
 
     /**
      * Gets the timestamp when this event was created.
-     * @return the event creation timestamp in milliseconds
+     * @return the creation timestamp in milliseconds
      */
-    public long getTimestamp() {
-        return timestamp;
-    }
+    long getTimestamp();
 
     /**
-     * Checks if this event has been cancelled.
-     * @return true if the event is cancelled, false otherwise
+     * Checks if this event can be cancelled.
+     * @return true if the event is cancellable
      */
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    /**
-     * Sets the cancelled state of this event.
-     * @param cancelled true to cancel the event, false to uncancel it
-     */
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
+    default boolean isCancellable() {
+        return this instanceof Cancellable;
     }
 }

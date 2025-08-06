@@ -53,8 +53,9 @@ public class SpigotPlugin implements Plugin {
     }
 
     /**
-     * Gets the underlying Bukkit plugin.
-     * @return the Bukkit JavaPlugin instance
+     * Gets the underlying Bukkit JavaPlugin instance.
+     * This is used for platform-specific operations.
+     * @return the wrapped JavaPlugin
      */
     public JavaPlugin getBukkitPlugin() {
         return bukkitPlugin;

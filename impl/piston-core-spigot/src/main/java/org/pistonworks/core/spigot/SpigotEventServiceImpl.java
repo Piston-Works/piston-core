@@ -1,146 +1,76 @@
 package org.pistonworks.core.spigot;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.pistonworks.core.api.event.Event;
-import org.pistonworks.core.api.service.EventService;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Consumer;
+import org.pistonworks.core.api.event.playerevent.PlayerChatEvent;
+import org.pistonworks.core.common.event.EventFactory;
+import org.pistonworks.core.common.event.EventServiceImpl;
+import org.pistonworks.core.common.event.RegisteredListener;
 
 /**
- * Spigot implementation of the EventService.
- * Bridges Bukkit events to Piston events and manages event listeners.
+ * Minimal Spigot event service implementation.
+ * This class only handles platform-specific event bridging - all logic is in common/api.
  */
-public class SpigotEventServiceImpl implements EventService, Listener {
-
-    private final JavaPlugin plugin;
-    private final List<Object> registeredListeners = new CopyOnWriteArrayList<>();
-    private final Map<Class<? extends Event>, List<Consumer<? extends Event>>> functionalHandlers = new HashMap<>();
-
-    public SpigotEventServiceImpl(JavaPlugin plugin) {
+public class SpigotEventServiceImpl extends EventServiceImpl implements Listener {
+    
+    private final SpigotPlugin plugin;
+    
+    public SpigotEventServiceImpl(SpigotPlugin plugin) {
         this.plugin = plugin;
-        // Register this class as a Bukkit listener to bridge events
-        Bukkit.getPluginManager().registerEvents(this, plugin);
+        // Register this as a Bukkit listener to bridge platform events
+        plugin.getBukkitPlugin().getServer().getPluginManager().registerEvents(this, plugin.getBukkitPlugin());
     }
-
-    @Override
-    public void registerListener(Object listener) {
-        if (!registeredListeners.contains(listener)) {
-            registeredListeners.add(listener);
-        }
-    }
-
-    @Override
-    public void unregisterListener(Object listener) {
-        registeredListeners.remove(listener);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends Event> void registerHandler(Class<T> eventClass, Consumer<T> handler) {
-        functionalHandlers.computeIfAbsent(eventClass, k -> new ArrayList<>()).add((Consumer<Event>) handler);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T extends Event> T fireEvent(T event) {
-        // Fire to functional handlers
-        List<Consumer<? extends Event>> handlers = functionalHandlers.get(event.getClass());
-        if (handlers != null) {
-            for (Consumer<? extends Event> handler : handlers) {
-                ((Consumer<T>) handler).accept(event);
-                if (event.isCancelled()) {
-                    break;
-                }
-            }
-        }
-
-        // Fire to registered listener objects
-        for (Object listener : registeredListeners) {
-            fireEventToListener(event, listener);
-            if (event.isCancelled()) {
-                break;
-            }
-        }
-
-        return event;
-    }
-
-    @Override
-    public List<Object> getRegisteredListeners() {
-        return new ArrayList<>(registeredListeners);
-    }
-
-    @Override
-    public boolean hasListeners(Class<? extends Event> eventClass) {
-        return !registeredListeners.isEmpty() ||
-               (functionalHandlers.containsKey(eventClass) && !functionalHandlers.get(eventClass).isEmpty());
-    }
-
-    private void fireEventToListener(Event event, Object listener) {
-        Class<?> listenerClass = listener.getClass();
-        for (Method method : listenerClass.getMethods()) {
-            if (method.isAnnotationPresent(EventHandler.class) &&
-                method.getParameterCount() == 1 &&
-                method.getParameterTypes()[0].isAssignableFrom(event.getClass())) {
-                try {
-                    method.setAccessible(true);
-                    method.invoke(listener, event);
-                } catch (Exception e) {
-                    plugin.getLogger().warning("Error firing event to listener: " + e.getMessage());
-                }
-            }
-        }
-    }
-
-    // Bukkit event bridges - these convert Bukkit events to Piston events
-
+    
+    // ===== BUKKIT EVENT BRIDGES =====
+    // These methods simply convert Bukkit events to Piston Core events
+    
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        SpigotPlayer pistonPlayer = new SpigotPlayer(event.getPlayer());
-        org.pistonworks.core.api.event.playerevent.PlayerJoinEvent pistonEvent =
-            new org.pistonworks.core.api.event.playerevent.PlayerJoinEvent(pistonPlayer, event.getJoinMessage());
+    public void onPlayerJoin(PlayerJoinEvent bukkitEvent) {
+        SpigotPlayer player = new SpigotPlayer(bukkitEvent.getPlayer());
+        org.pistonworks.core.api.event.playerevent.PlayerJoinEvent pistonEvent = 
+            EventFactory.createPlayerJoinEvent(player, bukkitEvent.getJoinMessage());
+        
         fireEvent(pistonEvent);
-
-        // Apply changes back to Bukkit event
-        if (pistonEvent.isCancelled()) {
-            // Bukkit PlayerJoinEvent is not cancellable, but we can kick the player
-            event.getPlayer().kickPlayer("Join cancelled");
-        }
-        event.setJoinMessage(pistonEvent.getJoinMessage());
+        
+        // Apply any changes back to Bukkit event
+        bukkitEvent.setJoinMessage(pistonEvent.getJoinMessage());
     }
-
+    
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        SpigotPlayer pistonPlayer = new SpigotPlayer(event.getPlayer());
-        org.pistonworks.core.api.event.playerevent.PlayerQuitEvent pistonEvent =
-            new org.pistonworks.core.api.event.playerevent.PlayerQuitEvent(pistonPlayer, event.getQuitMessage());
+    public void onPlayerQuit(PlayerQuitEvent bukkitEvent) {
+        SpigotPlayer player = new SpigotPlayer(bukkitEvent.getPlayer());
+        org.pistonworks.core.api.event.playerevent.PlayerQuitEvent pistonEvent = 
+            EventFactory.createPlayerQuitEvent(player, bukkitEvent.getQuitMessage());
+        
         fireEvent(pistonEvent);
-
-        // Apply changes back to Bukkit event
-        event.setQuitMessage(pistonEvent.getQuitMessage());
+        
+        // Apply any changes back to Bukkit event
+        bukkitEvent.setQuitMessage(pistonEvent.getQuitMessage());
     }
-
+    
     @EventHandler
-    public void onPlayerChat(PlayerChatEvent event) {
-        SpigotPlayer pistonPlayer = new SpigotPlayer(event.getPlayer());
-        org.pistonworks.core.api.event.playerevent.PlayerChatEvent pistonEvent =
-            new org.pistonworks.core.api.event.playerevent.PlayerChatEvent(pistonPlayer, event.getMessage());
+    public void onPlayerChat(AsyncPlayerChatEvent bukkitEvent) {
+        SpigotPlayer player = new SpigotPlayer(bukkitEvent.getPlayer());
+        PlayerChatEvent pistonEvent = EventFactory.createPlayerChatEvent(
+            player, bukkitEvent.getMessage(), bukkitEvent.getFormat());
+        
         fireEvent(pistonEvent);
-
-        // Apply changes back to Bukkit event
-        event.setCancelled(pistonEvent.isCancelled());
-        event.setMessage(pistonEvent.getMessage());
+        
+        // Apply any changes back to Bukkit event
+        bukkitEvent.setMessage(pistonEvent.getMessage());
+        bukkitEvent.setFormat(pistonEvent.getFormat());
+        bukkitEvent.setCancelled(pistonEvent.isCancelled());
+    }
+    
+    @Override
+    protected void handleListenerException(RegisteredListener listener, 
+                                         org.pistonworks.core.api.event.Event event, Exception exception) {
+        // Use Bukkit's logging system
+        plugin.getBukkitPlugin().getLogger().severe(String.format("Error in event listener %s handling event %s: %s",
+                                               listener.getClass().getSimpleName(), event.getEventName(), exception.getMessage()));
+        exception.printStackTrace();
     }
 }

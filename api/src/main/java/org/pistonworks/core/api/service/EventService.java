@@ -1,52 +1,64 @@
 package org.pistonworks.core.api.service;
 
 import org.pistonworks.core.api.event.Event;
+import org.pistonworks.core.api.event.EventListener;
+
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
 
 /**
- * Enhanced event service interface for registering and managing event listeners.
+ * Service for managing event registration and firing.
+ * This service provides a clean API for event handling while keeping implementation details
+ * in the common and implementation layers.
  */
 public interface EventService {
 
     /**
-     * Registers an event listener object.
-     * @param listener the listener object containing event handler methods
+     * Registers an object containing event handler methods.
+     * Methods annotated with @EventHandler will be automatically registered.
+     * @param listener the listener object
      */
     void registerListener(Object listener);
 
     /**
-     * Unregisters an event listener object.
+     * Unregisters all event handlers from the given listener object.
      * @param listener the listener object to unregister
      */
     void unregisterListener(Object listener);
 
     /**
-     * Registers a functional event handler for a specific event type.
-     * @param eventClass the class of the event to listen for
-     * @param handler the handler function to execute when the event occurs
-     * @param <T> the type of event
+     * Registers a functional event listener for a specific event type.
+     * @param eventClass the class of event to listen for
+     * @param listener the listener function
+     * @param <T> the event type
      */
-    <T extends Event> void registerHandler(Class<T> eventClass, Consumer<T> handler);
+    <T extends Event> void registerListener(Class<T> eventClass, EventListener<T> listener);
 
     /**
-     * Fires an event to all registered listeners.
+     * Fires an event synchronously to all registered listeners.
      * @param event the event to fire
-     * @param <T> the type of event
-     * @return the event after it has been processed by all listeners
+     * @param <T> the event type
+     * @return the event (potentially modified by listeners)
      */
     <T extends Event> T fireEvent(T event);
 
     /**
-     * Gets a list of all registered listeners.
-     * @return list of registered listener objects
+     * Fires an event asynchronously to all registered listeners.
+     * @param event the event to fire
+     * @param <T> the event type
+     * @return a CompletableFuture containing the event result
      */
-    List<Object> getRegisteredListeners();
+    <T extends Event> CompletableFuture<T> fireEventAsync(T event);
 
     /**
-     * Checks if there are any listeners registered for a specific event type.
-     * @param eventClass the event class to check
-     * @return true if there are listeners for this event type, false otherwise
+     * Gets the number of registered listeners for a specific event type.
+     * @param eventClass the event class
+     * @return the number of listeners
      */
-    boolean hasListeners(Class<? extends Event> eventClass);
+    int getListenerCount(Class<? extends Event> eventClass);
+
+    /**
+     * Unregisters all event listeners.
+     */
+    void unregisterAll();
 }

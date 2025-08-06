@@ -9,14 +9,16 @@ import org.pistonworks.core.api.service.LifecycleService;
 public final class PistonCoreSpigotServices implements PistonCoreServices {
 
     private final JavaPlugin plugin;
+    private final SpigotPlugin spigotPlugin;
     private final CommandService commandService;
     private final EventService eventService;
     private final LifecycleService lifecycleService;
 
     public PistonCoreSpigotServices(JavaPlugin plugin) {
         this.plugin = plugin;
+        this.spigotPlugin = new SpigotPlugin(plugin);
         this.commandService = new SpigotCommandServiceImpl(plugin);
-        this.eventService = new SpigotEventServiceImpl(plugin);
+        this.eventService = new SpigotEventServiceImpl(spigotPlugin);
         this.lifecycleService = new SpigotLifecycleServiceImpl(plugin);
     }
 
