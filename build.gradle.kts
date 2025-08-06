@@ -4,11 +4,11 @@ plugins {
     `maven-publish`
 }
 
-group = "org.pistonworks"
-version = "0.1.0"
-
 // Configure all projects (including this one)
 allprojects {
+    group = "org.pistonworks"
+    version = "0.1.0"
+
     apply(plugin = "java")
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
