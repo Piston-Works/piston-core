@@ -29,8 +29,8 @@ class PistonCorePlugin : Plugin<Project> {
 
         // Add Piston Core dependencies
         project.dependencies.apply {
-            add("implementation", "org.pistonworks:api:0.2.0")
-            add("implementation", "org.pistonworks:common:0.2.0")
+            add("implementation", "org.pistonworks:api:0.3.0")
+            add("implementation", "org.pistonworks:common:0.3.0")
         }
 
         // Create extension for configuration
@@ -68,7 +68,7 @@ class PistonCorePlugin : Plugin<Project> {
 
         // Include Spigot implementation
         val spigotConfig = project.configurations.create("spigotImplementation")
-        project.dependencies.add("spigotImplementation", "org.pistonworks:piston-core-spigot:0.2.0")
+        project.dependencies.add("spigotImplementation", "org.pistonworks:piston-core-spigot:0.3.0")
         spigotTask.from(spigotConfig.map { file ->
             if (file.isDirectory) file else project.zipTree(file)
         })
