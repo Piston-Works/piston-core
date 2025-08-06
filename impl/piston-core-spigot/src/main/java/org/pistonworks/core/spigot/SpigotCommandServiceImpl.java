@@ -3,10 +3,14 @@ package org.pistonworks.core.spigot;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.pistonworks.core.api.command.CommandHandler;
+import org.pistonworks.core.api.command.TabCompleter;
+import org.pistonworks.core.api.model.CommandSender;
 import org.pistonworks.core.api.service.CommandService;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +75,7 @@ public final class SpigotCommandServiceImpl implements CommandService
                 Command command = new Command(commandName, description, usage, List.of(aliases))
                 {
                     @Override
-                    public boolean execute(CommandSender sender, String commandLabel, String[] args)
+                    public boolean execute(org.bukkit.command.CommandSender sender, String commandLabel, String[] args)
                     {
                         SpigotCommandWrapper wrapper = new SpigotCommandWrapper(executor);
                         return wrapper.onCommand(sender, this, commandLabel, args);
@@ -132,7 +136,7 @@ public final class SpigotCommandServiceImpl implements CommandService
     }
 
     @Override
-    public boolean executeCommand(org.pistonworks.core.api.model.entity.CommandSender sender, String commandLine)
+    public boolean executeCommand(CommandSender sender, String commandLine)
     {
         if (commandLine == null || commandLine.trim().isEmpty())
         {
@@ -153,6 +157,78 @@ public final class SpigotCommandServiceImpl implements CommandService
         return false;
     }
 
+    @Override
+    public List<String> getTabCompletions(CommandSender sender, String commandLine)
+    {
+        if (commandLine == null || commandLine.trim().isEmpty())
+        {
+            return new ArrayList<>();
+        }
+
+        String[] parts = commandLine.split("\\s+", -1);
+        if (parts.length == 0) return new ArrayList<>();
+
+        String commandName = parts[0].toLowerCase();
+        if (commandName.startsWith("/")) {
+            commandName = commandName.substring(1);
+        }
+
+        org.pistonworks.core.api.service.CommandExecutor executor = registeredCommands.get(commandName);
+        if (executor != null)
+        {
+            String[] args = parts.length > 1 ? Arrays.copyOfRange(parts, 1, parts.length) : new String[]{""};
+            // For now, return empty list since CommandExecutor doesn't have getTabCompletions method
+            // This would need to be implemented properly when CommandExecutor interface is updated
+            return new ArrayList<>();
+        }
+
+        return new ArrayList<>();
+    }
+
+    // Implementation of CommandRegistry methods required by CommandService
+    @Override
+    public void registerCommands(CommandHandler handler)
+    {
+        // This would delegate to a CommandRegistry implementation
+        // For now, throw UnsupportedOperationException until CommandRegistry is integrated
+        throw new UnsupportedOperationException("CommandHandler registration not yet implemented in Spigot implementation");
+    }
+
+    @Override
+    public void registerCommands(Class<? extends CommandHandler> handlerClass)
+    {
+        // This would delegate to a CommandRegistry implementation
+        throw new UnsupportedOperationException("CommandHandler registration not yet implemented in Spigot implementation");
+    }
+
+    @Override
+    public void unregisterCommands(CommandHandler handler)
+    {
+        // This would delegate to a CommandRegistry implementation
+        throw new UnsupportedOperationException("CommandHandler unregistration not yet implemented in Spigot implementation");
+    }
+
+    @Override
+    public void unregisterCommands(Class<? extends CommandHandler> handlerClass)
+    {
+        // This would delegate to a CommandRegistry implementation
+        throw new UnsupportedOperationException("CommandHandler unregistration not yet implemented in Spigot implementation");
+    }
+
+    @Override
+    public void registerTabCompleter(String type, TabCompleter completer)
+    {
+        // This would delegate to a CommandRegistry implementation
+        throw new UnsupportedOperationException("TabCompleter registration not yet implemented in Spigot implementation");
+    }
+
+    @Override
+    public org.pistonworks.core.api.command.CommandInfo getCommandInfo(String commandName)
+    {
+        // This would delegate to a CommandRegistry implementation
+        throw new UnsupportedOperationException("CommandInfo retrieval not yet implemented in Spigot implementation");
+    }
+
     /**
      * Wrapper class to bridge Bukkit CommandExecutor to Piston CommandExecutor
      */
@@ -166,9 +242,9 @@ public final class SpigotCommandServiceImpl implements CommandService
         }
 
         @Override
-        public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+        public boolean onCommand(org.bukkit.command.CommandSender sender, Command command, String label, String[] args)
         {
-            org.pistonworks.core.api.model.entity.CommandSender pistonSender;
+            org.pistonworks.core.api.model.CommandSender pistonSender;
 
             if (sender instanceof Player)
             {

@@ -34,7 +34,7 @@ public @interface Command
     String description() default "";
 
     /**
-     * Command usage pattern (e.g., "/command <player> [amount]").
+     * Command usage pattern (e.g., "/command &lt;player&gt; [amount]").
      */
     String usage() default "";
 

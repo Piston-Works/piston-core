@@ -7,7 +7,7 @@ import org.pistonworks.core.api.model.CommandSender;
  * on methods to create commands with minimal boilerplate.
  *
  * Example usage:
- * <pre>
+ * <pre>{@code
  * public class MyCommands extends CommandHandler {
  *
  *     @Command(value = "heal", description = "Heal a player", permission = "myplugin.heal")
@@ -21,7 +21,7 @@ import org.pistonworks.core.api.model.CommandSender;
  *         // Broadcast implementation
  *     }
  * }
- * </pre>
+ * }</pre>
  */
 public abstract class CommandHandler
 {

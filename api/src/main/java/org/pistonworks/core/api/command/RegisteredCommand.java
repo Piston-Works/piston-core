@@ -240,9 +240,15 @@ class RegisteredCommand
                 try
                 {
                     Object result = completionMethod.invoke(handler, sender, commandName, args, currentArg);
-                    if (result instanceof List)
+                    if (result instanceof List<?> list)
                     {
-                        return (List<String>) result;
+                        // Check if all elements are strings
+                        if (list.isEmpty() || list.get(0) instanceof String)
+                        {
+                            @SuppressWarnings("unchecked")
+                            List<String> stringList = (List<String>) list;
+                            return stringList;
+                        }
                     }
                 }
                 catch (Exception e)
@@ -261,27 +267,24 @@ class RegisteredCommand
 
         // Check for registered tab completers
         String completionTypeName = argInfo.getCompletionType().name().toLowerCase();
-        if (registry.tabCompleters.containsKey(completionTypeName))
+        TabCompleter tabCompleter = registry.getTabCompleter(completionTypeName);
+        if (tabCompleter != null)
         {
-            return registry.tabCompleters.get(completionTypeName).complete(sender, commandName, args, currentArg);
+            return tabCompleter.complete(sender, commandName, args, currentArg);
         }
 
         // Built-in completion types
-        switch (argInfo.getCompletionType())
-        {
-            case BOOLEAN:
-                return Arrays.asList("true", "false");
-            case PLAYER:
-            case ONLINE_PLAYER:
+        return switch (argInfo.getCompletionType()) {
+            case BOOLEAN -> Arrays.asList("true", "false");
+            case PLAYER, ONLINE_PLAYER ->
                 // These would be implemented by the platform-specific implementation
                 // For now, return empty list
-                return Collections.emptyList();
-            case WORLD:
+                Collections.emptyList();
+            case WORLD ->
                 // Platform-specific implementation needed
-                return Collections.emptyList();
-            default:
-                return Collections.emptyList();
-        }
+                Collections.emptyList();
+            default -> Collections.emptyList();
+        };
     }
 
     private String generateUsage()

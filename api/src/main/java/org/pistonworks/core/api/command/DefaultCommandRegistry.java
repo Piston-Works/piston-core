@@ -138,20 +138,23 @@ public class DefaultCommandRegistry implements CommandRegistry
             commandName = commandName.substring(1);
         }
 
+        // Make commandName effectively final for lambda
+        final String finalCommandName = commandName;
+
         // If we're still typing the command name
         if (parts.length == 1 && !commandLine.endsWith(" "))
         {
             return commands.keySet().stream()
-                .filter(cmd -> cmd.startsWith(commandName))
+                .filter(cmd -> cmd.startsWith(finalCommandName))
                 .sorted()
                 .collect(Collectors.toList());
         }
 
-        RegisteredCommand registeredCommand = commands.get(commandName);
+        RegisteredCommand registeredCommand = commands.get(finalCommandName);
         if (registeredCommand == null) return Collections.emptyList();
 
         String[] args = parts.length > 1 ? Arrays.copyOfRange(parts, 1, parts.length) : new String[]{""};
-        return registeredCommand.getTabCompletions(sender, commandName, args);
+        return registeredCommand.getTabCompletions(sender, finalCommandName, args);
     }
 
     @Override
@@ -165,6 +168,15 @@ public class DefaultCommandRegistry implements CommandRegistry
     {
         RegisteredCommand registeredCommand = commands.get(commandName.toLowerCase());
         return registeredCommand != null ? registeredCommand.getCommandInfo() : null;
+    }
+
+    /**
+     * Gets the tab completer for the specified type.
+     * Package-private method for use by RegisteredCommand.
+     */
+    TabCompleter getTabCompleter(String type)
+    {
+        return tabCompleters.get(type.toLowerCase());
     }
 
     private RegisteredCommand createRegisteredCommand(CommandHandler handler, Method method, Command cmdAnnotation)

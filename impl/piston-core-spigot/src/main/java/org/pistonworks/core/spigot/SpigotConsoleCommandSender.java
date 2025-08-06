@@ -1,7 +1,7 @@
 package org.pistonworks.core.spigot;
 
 import org.bukkit.command.CommandSender;
-import org.pistonworks.core.api.model.entity.ConsoleCommandSender;
+import org.pistonworks.core.api.model.ConsoleCommandSender;
 
 /**
  * Spigot implementation of ConsoleCommandSender
