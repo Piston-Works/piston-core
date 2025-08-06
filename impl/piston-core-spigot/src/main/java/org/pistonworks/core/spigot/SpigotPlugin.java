@@ -1,15 +1,15 @@
 package org.pistonworks.core.spigot;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import org.pistonworks.core.api.model.Plugin;
+import org.pistonworks.core.api.model.PluginContainer;
 
 import java.io.File;
 
 /**
- * Spigot implementation of the Piston Plugin interface.
+ * Spigot implementation of the Piston PluginContainer interface.
  * Wraps a Bukkit JavaPlugin to provide the Piston API interface.
  */
-public class SpigotPlugin implements Plugin
+public class SpigotPlugin implements PluginContainer
 {
 
     private final JavaPlugin bukkitPlugin;
@@ -50,25 +50,39 @@ public class SpigotPlugin implements Plugin
     }
 
     @Override
-    public boolean isEnabled()
+    public Object getInstance()
     {
-        return bukkitPlugin.isEnabled();
-    }
-
-    @Override
-    public String[] getAuthors()
-    {
-        return bukkitPlugin.getDescription().getAuthors().toArray(new String[0]);
+        return bukkitPlugin;
     }
 
     /**
      * Gets the underlying Bukkit JavaPlugin instance.
      * This is used for platform-specific operations.
      *
-     * @return the wrapped JavaPlugin
+     * @return the Bukkit JavaPlugin instance
      */
     public JavaPlugin getBukkitPlugin()
     {
         return bukkitPlugin;
+    }
+
+    /**
+     * Checks if this plugin is currently enabled.
+     *
+     * @return true if the plugin is enabled, false otherwise
+     */
+    public boolean isEnabled()
+    {
+        return bukkitPlugin.isEnabled();
+    }
+
+    /**
+     * Gets the authors of this plugin.
+     *
+     * @return array of author names
+     */
+    public String[] getAuthors()
+    {
+        return bukkitPlugin.getDescription().getAuthors().toArray(new String[0]);
     }
 }

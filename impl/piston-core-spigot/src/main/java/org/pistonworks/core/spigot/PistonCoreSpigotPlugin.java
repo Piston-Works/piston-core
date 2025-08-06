@@ -1,6 +1,7 @@
 package org.pistonworks.core.spigot;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.pistonworks.core.api.PistonCore;
 import org.pistonworks.core.api.service.CommandService;
 import org.pistonworks.core.api.service.EventService;
 
@@ -22,19 +23,19 @@ public final class PistonCoreSpigotPlugin extends JavaPlugin
     {
         instance = this;
 
-        // Create SpigotPlugin
+        // Initialize Piston Core services first
+        PistonCore.setServices(services);
+
+        // Create SpigotPlugin wrapper
         spigotPlugin = new SpigotPlugin(this);
 
-        // Call the lifecycle hook to let the core know it's loaded.
-        services.getLifecycleService().onEnable(spigotPlugin);
         getLogger().info("Piston Core Spigot implementation enabled!");
     }
 
     @Override
     public void onDisable()
     {
-        // Call the lifecycle hook to let the core know it's being unloaded.
-        services.getLifecycleService().onDisable(spigotPlugin);
+        // No need to call lifecycle service here - individual plugins handle their own lifecycle
         instance = null;
         getLogger().info("Piston Core Spigot implementation disabled!");
     }

@@ -1,26 +1,21 @@
 package com.example;
 
-import org.bukkit.plugin.java.JavaPlugin;
-import org.pistonworks.core.api.PistonCore;
 import org.pistonworks.core.api.command.Command;
 import org.pistonworks.core.api.command.CommandContext;
 import org.pistonworks.core.api.event.EventListener;
 import org.pistonworks.core.api.event.player.PlayerJoinEvent;
+import org.pistonworks.core.api.plugin.PistonPlugin;
+import org.pistonworks.core.api.PistonCore;
 
 /**
  * Example plugin that demonstrates zero platform-specific code.
- * Note: The only platform-specific part is extending JavaPlugin for Spigot.
- * Other platforms would extend different base classes (e.g., ModInitializer for Fabric).
  */
-public class ExamplePlugin extends JavaPlugin
+public class ExamplePlugin extends PistonPlugin
 {
 
     @Override
     public void onEnable()
     {
-        // Initialize Piston Core - this will auto-discover this plugin
-        PistonCore.autoInitialize();
-
         // Register a command - completely platform agnostic
         PistonCore.getCommandService().registerCommand(new Command()
         {

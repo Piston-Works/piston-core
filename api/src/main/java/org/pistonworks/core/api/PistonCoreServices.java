@@ -4,6 +4,7 @@ import org.pistonworks.core.api.service.CommandService;
 import org.pistonworks.core.api.service.EventService;
 import org.pistonworks.core.api.service.LifecycleService;
 import org.pistonworks.core.api.service.PluginDiscoveryService;
+import org.pistonworks.core.api.service.LoggingService;
 
 /**
  * Main services interface that all platform implementations must provide.
@@ -39,4 +40,11 @@ public interface PistonCoreServices
      * @return the plugin discovery service implementation
      */
     PluginDiscoveryService getPluginDiscoveryService();
+
+    /**
+     * Get the logging service for logging messages.
+     *
+     * @return the logging service implementation
+     */
+    LoggingService getLoggingService();
 }

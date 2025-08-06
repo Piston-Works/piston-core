@@ -3,10 +3,9 @@ package org.pistonworks.core.api.model;
 import java.io.File;
 
 /**
- * Represents a plugin in the system, abstracting platform-specific plugin implementations.
+ * Represents a container for a plugin, holding its metadata and instance.
  */
-public interface Plugin
-{
+public interface PluginContainer {
 
     /**
      * Gets the name of this plugin.
@@ -44,16 +43,10 @@ public interface Plugin
     File getDataFolder();
 
     /**
-     * Checks if this plugin is currently enabled.
+     * Gets the instance of the plugin.
      *
-     * @return true if the plugin is enabled, false otherwise
+     * @return the plugin instance
      */
-    boolean isEnabled();
-
-    /**
-     * Gets the authors of this plugin.
-     *
-     * @return array of author names
-     */
-    String[] getAuthors();
+    Object getInstance();
 }
+

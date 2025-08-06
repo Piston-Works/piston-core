@@ -1,5 +1,6 @@
 package org.pistonworks.core.api.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +28,17 @@ public class PluginMetadata
         this.authors = authors;
         this.dependencies = dependencies;
         this.apiVersion = apiVersion;
+    }
+
+    public PluginMetadata(String name, String version, String description, String mainClass)
+    {
+        this.name = name;
+        this.version = version;
+        this.description = description;
+        this.mainClass = mainClass;
+        this.authors = new ArrayList<>();
+        this.dependencies = new ArrayList<>();
+        this.apiVersion = "0.3.0";
     }
 
     public String getName()

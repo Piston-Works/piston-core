@@ -1,7 +1,7 @@
 package org.pistonworks.core.spigot;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import org.pistonworks.core.api.model.Plugin;
+import org.pistonworks.core.api.plugin.PistonPlugin;
 import org.pistonworks.core.api.service.LifecycleService;
 
 /**
@@ -19,16 +19,16 @@ public class SpigotLifecycleServiceImpl implements LifecycleService
     }
 
     @Override
-    public void onEnable(Plugin plugin)
+    public void onEnable(PistonPlugin plugin)
     {
-        this.plugin.getLogger().info("Plugin enabled: " + plugin.getName() + " v" + plugin.getVersion());
+        this.plugin.getLogger().info("Plugin enabled: " + plugin.getClass().getSimpleName());
         // Additional enable logic can be added here
     }
 
     @Override
-    public void onDisable(Plugin plugin)
+    public void onDisable(PistonPlugin plugin)
     {
-        this.plugin.getLogger().info("Plugin disabled: " + plugin.getName() + " v" + plugin.getVersion());
+        this.plugin.getLogger().info("Plugin disabled: " + plugin.getClass().getSimpleName());
         // Additional disable logic can be added here
     }
 

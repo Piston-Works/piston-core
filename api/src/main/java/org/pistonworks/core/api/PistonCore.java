@@ -1,8 +1,10 @@
 package org.pistonworks.core.api;
 
+import org.pistonworks.core.api.plugin.PistonPlugin;
 import org.pistonworks.core.api.service.CommandService;
 import org.pistonworks.core.api.service.EventService;
 import org.pistonworks.core.api.service.LifecycleService;
+import org.pistonworks.core.api.service.LoggingService;
 import org.pistonworks.core.api.service.PluginDiscoveryService;
 
 // The central access point for all Piston Core services.
@@ -10,7 +12,6 @@ public final class PistonCore
 {
 
     private static PistonCoreServices services;
-    private static boolean autoInitialized = false;
 
     public static CommandService getCommandService()
     {
@@ -30,6 +31,10 @@ public final class PistonCore
     public static PluginDiscoveryService getPluginDiscoveryService()
     {
         return getServices().getPluginDiscoveryService();
+    }
+
+    public static LoggingService getLoggingService() {
+        return getServices().getLoggingService();
     }
 
     private static PistonCoreServices getServices()
@@ -61,22 +66,18 @@ public final class PistonCore
     /**
      * Initialize the plugin automatically when Piston Core is first accessed.
      * This is called automatically when the plugin JAR is loaded.
+     * @param plugin The plugin instance to initialize.
      */
-    public static void autoInitialize()
+    public static void autoInitialize(PistonPlugin plugin)
     {
-        if (!autoInitialized)
+        // Auto-discover and initialize the current plugin
+        try
         {
-            autoInitialized = true;
-
-            // Auto-discover and initialize the current plugin
-            try
-            {
-                getServices().getPluginDiscoveryService().autoDiscoverCurrentPlugin();
-            }
-            catch (Exception e)
-            {
-                System.err.println("Failed to auto-initialize plugin: " + e.getMessage());
-            }
+            getServices().getPluginDiscoveryService().discoverPlugin(plugin);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Failed to auto-initialize plugin: " + e.getMessage());
         }
     }
 
@@ -98,8 +99,6 @@ public final class PistonCore
                         .getConstructor(Object.class)
                         .newInstance(pluginInstance);
 
-                // Auto-initialize the current plugin
-                autoInitialize();
 
             } catch (Exception e)
             {

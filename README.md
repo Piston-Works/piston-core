@@ -53,102 +53,101 @@ version = "1.0.0"
 ```java
 package com.example;
 
-import org.bukkit.plugin.java.JavaPlugin;
 import org.pistonworks.core.api.PistonCore;
 import org.pistonworks.core.api.command.Command;
-import org.pistonworks.core.api.command.CommandHandler;
-import org.pistonworks.core.api.command.Arg;
-import org.pistonworks.core.api.event.EventHandler;
+import org.pistonworks.core.api.command.CommandContext;
+import org.pistonworks.core.api.event.EventListener;
 import org.pistonworks.core.api.event.player.PlayerJoinEvent;
-import org.pistonworks.core.api.model.CommandSender;
-import org.pistonworks.core.api.model.Player;
+import org.pistonworks.core.api.plugin.PistonPlugin;
 
-public class MyPlugin extends JavaPlugin {
+/**
+ * Example plugin that demonstrates zero platform-specific code.
+ * This plugin will work on ANY platform - Spigot, Fabric, Forge, Velocity, etc.
+ */
+public class MyPlugin extends PistonPlugin {
 
     @Override
     public void onEnable() {
-        // Initialize Piston Core
-        PistonCore.autoInitialize();
-        
-        // Register commands using annotations
-        PistonCore.getCommandService().registerHandler(new MyCommands());
-        
-        // Register event listeners
-        PistonCore.getEventService().registerListener(PlayerJoinEvent.class, this::onPlayerJoin);
-        
-        getLogger().info("MyPlugin enabled!");
+        // Register commands using the platform-agnostic API
+        PistonCore.getCommandService().registerCommand(new Command() {
+            @Override
+            public String getName() {
+                return "heal";
+            }
+
+            @Override
+            public String getDescription() {
+                return "Heal yourself or another player";
+            }
+
+            @Override
+            public void execute(CommandContext context) {
+                context.getSender().sendMessage("You have been healed!");
+                // Implementation would go here
+            }
+        });
+
+        // Register event listeners - completely platform agnostic
+        PistonCore.getEventService().registerListener(new EventListener<PlayerJoinEvent>() {
+            @Override
+            public void onEvent(PlayerJoinEvent event) {
+                event.getPlayer().sendMessage("Welcome to the server, " + event.getPlayer().getName() + "!");
+            }
+
+            @Override
+            public Class<PlayerJoinEvent> getEventType() {
+                return PlayerJoinEvent.class;
+            }
+        });
+
+        // Use platform-agnostic logging
+        getLogger().info("MyPlugin has been enabled!");
     }
-    
-    // Event listener method
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        player.sendMessage("Welcome to the server, " + player.getName() + "!");
-    }
-    
-    // Command handler class
-    public static class MyCommands extends CommandHandler {
-        
-        @Command(value = "heal", description = "Heal yourself or another player", permission = "myplugin.heal")
-        public void heal(CommandSender sender, 
-                        @Arg(value = "player", optional = true) String playerName,
-                        @Arg(value = "amount", optional = true, defaultValue = "20") int amount) {
-            
-            String target = playerName != null ? playerName : sender.getName();
-            sender.sendMessage("Healing " + target + " for " + amount + " health!");
-            // Implementation would go here
-        }
-        
-        @Command(value = "broadcast", aliases = {"bc"}, description = "Broadcast a message")
-        public void broadcast(CommandSender sender, @Arg("message") String message) {
-            // Broadcast to all players
-            sender.sendMessage("Broadcasting: " + message);
-            // Implementation would go here
-        }
+
+    @Override
+    public void onDisable() {
+        getLogger().info("MyPlugin has been disabled!");
     }
 }
 ```
 
-### 4. Platform-Specific Setup
+### 4. Platform Setup
 
-The example above shows Spigot setup (extending `JavaPlugin`). For other platforms:
+The beauty of Piston Core is that **your plugin code is 100% platform-independent**. The same JAR file will work on:
 
-- **Fabric**: Extend `ModInitializer` 
-- **Forge**: Use `@Mod` annotation
-- **Velocity**: Extend velocity plugin class
+- **Spigot/Paper/Bukkit**: Drop into plugins folder
+- **Fabric**: Install as a mod
+- **Forge**: Install as a mod  
+- **Velocity**: Drop into plugins folder
 
-The core Piston Core API calls remain exactly the same across all platforms!
+No platform-specific code required! Piston Core handles all the platform differences for you.
 
 ## Key Features
 
-- **Cross-Platform**: Write once, run on Spigot, Fabric, Forge, and more
-- **Annotation-Based Commands**: Simple `@Command` annotations with automatic argument parsing
-- **Type-Safe Events**: Strongly typed event system with lambda support
-- **Zero Boilerplate**: Minimal setup code required
-- **Auto-Discovery**: Automatic plugin initialization and registration
+### ✅ Zero Platform-Specific Code
+Your plugins extend `PistonPlugin` instead of platform-specific base classes. No more `JavaPlugin`, `ModInitializer`, or other platform dependencies in your code.
 
-## Supported platforms
+### ✅ Unified Logging
+Use the built-in logger with standard levels:
+```java
+getLogger().debug("Debug message");
+getLogger().info("Info message");  
+getLogger().warn("Warning message");
+getLogger().error("Error message");
+getLogger().critical("Critical message");
+```
 
-- [x] Spigot/any Spigot fork
-- [ ] Fabric (planned)
-- [ ] Forge (planned)
-- [ ] NeoForge (planned)
-- [ ] Velocity (planned)
-- [ ] BungeeCord (planned)
-- [ ] Folia (planned)
+### ✅ Cross-Platform Commands
+Register commands that work everywhere:
+```java
+PistonCore.getCommandService().registerCommand(myCommand);
+```
 
-## What's not supported
+### ✅ Universal Events
+Listen to events across all platforms:
+```java
+PistonCore.getEventService().registerListener(myListener);
+```
 
-- [ ] Client side mods
-- [ ] Hybrid server software (e.g. Mohist, SpongeForge, etc.)
-
-## Supported use cases
-
-- ✅ Creating custom commands
-- ✅ Listening for events
-- ✅ Almost anything you could do with a Spigot plugin
-- ❌ This is **not** a modding framework, so you cannot create custom blocks, items, entities, etc.
-
-## Repositories
-
-https://nexus.alecj.tk/#browse/browse:maven-releases:org%2Fpistonworks
+### ✅ Automatic Initialization
+No need to manually initialize Piston Core - it happens automatically when you extend `PistonPlugin`.

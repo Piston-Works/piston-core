@@ -10,6 +10,10 @@ import java.io.File
 
 class PistonCorePlugin : Plugin<Project> {
 
+    companion object {
+        private const val PISTON_CORE_VERSION = "0.4.0"
+    }
+
     override fun apply(project: Project) {
         // Apply Java plugin
         project.plugins.apply("java")
@@ -29,8 +33,8 @@ class PistonCorePlugin : Plugin<Project> {
 
         // Add Piston Core dependencies
         project.dependencies.apply {
-            add("implementation", "org.pistonworks:api:0.3.0")
-            add("implementation", "org.pistonworks:common:0.3.0")
+            add("implementation", "org.pistonworks:api:$PISTON_CORE_VERSION")
+            add("implementation", "org.pistonworks:common:$PISTON_CORE_VERSION")
         }
 
         // Create extension for configuration
@@ -68,7 +72,7 @@ class PistonCorePlugin : Plugin<Project> {
 
         // Include Spigot implementation
         val spigotConfig = project.configurations.create("spigotImplementation")
-        project.dependencies.add("spigotImplementation", "org.pistonworks:piston-core-spigot:0.3.0")
+        project.dependencies.add("spigotImplementation", "org.pistonworks:piston-core-spigot:$PISTON_CORE_VERSION")
         spigotTask.from(spigotConfig.map { file ->
             if (file.isDirectory) file else project.zipTree(file)
         })
