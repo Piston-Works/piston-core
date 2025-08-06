@@ -7,7 +7,7 @@ plugins {
 // Configure all projects (including this one)
 allprojects {
     group = "org.pistonworks"
-    version = "0.2.0"
+    version = "0.3.0"
 
     apply(plugin = "java")
     apply(plugin = "java-library")
@@ -48,7 +48,7 @@ allprojects {
                 from(components["java"])
 
                 pom {
-                    name.set("${project.name}")
+                    name.set(project.name)
                     description.set("Piston Core is a cross-platform API for building Minecraft server-side mods/plugins")
                     url.set("https://github.com/Piston-Works/piston-core")
 

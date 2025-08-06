@@ -3,12 +3,14 @@ package org.pistonworks.core.api;
 import org.pistonworks.core.api.service.CommandService;
 import org.pistonworks.core.api.service.EventService;
 import org.pistonworks.core.api.service.LifecycleService;
+import org.pistonworks.core.api.service.PluginDiscoveryService;
 
 // The central access point for all Piston Core services.
 public final class PistonCore
 {
 
     private static PistonCoreServices services;
+    private static boolean autoInitialized = false;
 
     public static CommandService getCommandService()
     {
@@ -23,6 +25,11 @@ public final class PistonCore
     public static LifecycleService getLifecycleService()
     {
         return getServices().getLifecycleService();
+    }
+
+    public static PluginDiscoveryService getPluginDiscoveryService()
+    {
+        return getServices().getPluginDiscoveryService();
     }
 
     private static PistonCoreServices getServices()
@@ -51,6 +58,28 @@ public final class PistonCore
         services = servicesImpl;
     }
 
+    /**
+     * Initialize the plugin automatically when Piston Core is first accessed.
+     * This is called automatically when the plugin JAR is loaded.
+     */
+    public static void autoInitialize()
+    {
+        if (!autoInitialized)
+        {
+            autoInitialized = true;
+
+            // Auto-discover and initialize the current plugin
+            try
+            {
+                getServices().getPluginDiscoveryService().autoDiscoverCurrentPlugin();
+            }
+            catch (Exception e)
+            {
+                System.err.println("Failed to auto-initialize plugin: " + e.getMessage());
+            }
+        }
+    }
+
     private static void initializePlatformServices()
     {
         // Try to detect and initialize Spigot services
@@ -68,6 +97,9 @@ public final class PistonCore
                 services = (PistonCoreServices) spigotServicesClass
                         .getConstructor(Object.class)
                         .newInstance(pluginInstance);
+
+                // Auto-initialize the current plugin
+                autoInitialize();
 
             } catch (Exception e)
             {

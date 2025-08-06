@@ -1,0 +1,8 @@
+name: "ExamplePlugin"
+version: "1.0.0"
+description: "An example plugin that works on any platform"
+main: "com.example.ExamplePlugin"
+api-version: "1.0"
+authors: ["YourName"]
+dependencies: []
+

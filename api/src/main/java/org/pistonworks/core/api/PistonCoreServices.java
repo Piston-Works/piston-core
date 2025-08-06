@@ -3,6 +3,7 @@ package org.pistonworks.core.api;
 import org.pistonworks.core.api.service.CommandService;
 import org.pistonworks.core.api.service.EventService;
 import org.pistonworks.core.api.service.LifecycleService;
+import org.pistonworks.core.api.service.PluginDiscoveryService;
 
 /**
  * Main services interface that all platform implementations must provide.
@@ -31,4 +32,11 @@ public interface PistonCoreServices
      * @return the lifecycle service implementation
      */
     LifecycleService getLifecycleService();
+
+    /**
+     * Get the plugin discovery service for automatically loading plugins.
+     *
+     * @return the plugin discovery service implementation
+     */
+    PluginDiscoveryService getPluginDiscoveryService();
 }

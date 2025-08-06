@@ -5,6 +5,10 @@ import org.pistonworks.core.api.PistonCoreServices;
 import org.pistonworks.core.api.service.CommandService;
 import org.pistonworks.core.api.service.EventService;
 import org.pistonworks.core.api.service.LifecycleService;
+import org.pistonworks.core.api.service.PluginDiscoveryService;
+import org.pistonworks.core.common.PluginDiscoveryServiceImpl;
+
+import java.io.File;
 
 public final class PistonCoreSpigotServices implements PistonCoreServices
 {
@@ -14,6 +18,7 @@ public final class PistonCoreSpigotServices implements PistonCoreServices
     private final CommandService commandService;
     private final EventService eventService;
     private final LifecycleService lifecycleService;
+    private final PluginDiscoveryService pluginDiscoveryService;
 
     public PistonCoreSpigotServices(JavaPlugin plugin)
     {
@@ -22,6 +27,11 @@ public final class PistonCoreSpigotServices implements PistonCoreServices
         this.commandService = new SpigotCommandServiceImpl(plugin);
         this.eventService = new SpigotEventServiceImpl(spigotPlugin);
         this.lifecycleService = new SpigotLifecycleServiceImpl(plugin);
+
+        // Initialize plugin discovery service for the current bundled plugin
+        // We use the plugin's data folder as both plugins dir and data dir since we're only handling one plugin
+        File pluginDataFolder = plugin.getDataFolder();
+        this.pluginDiscoveryService = new PluginDiscoveryServiceImpl(pluginDataFolder, pluginDataFolder);
     }
 
     // Additional constructor for reflection-based initialization from API
@@ -46,5 +56,11 @@ public final class PistonCoreSpigotServices implements PistonCoreServices
     public LifecycleService getLifecycleService()
     {
         return this.lifecycleService;
+    }
+
+    @Override
+    public PluginDiscoveryService getPluginDiscoveryService()
+    {
+        return this.pluginDiscoveryService;
     }
 }
