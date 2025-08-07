@@ -10,6 +10,11 @@ public class SpigotConsoleCommandSender implements ConsoleCommandSender
 {
     private final CommandSender bukkit;
 
+    /**
+     * Creates a new SpigotConsoleCommandSender wrapper.
+     * 
+     * @param bukkit The Bukkit CommandSender to wrap
+     */
     public SpigotConsoleCommandSender(CommandSender bukkit)
     {
         this.bukkit = bukkit;

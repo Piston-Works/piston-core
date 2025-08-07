@@ -18,6 +18,11 @@ public class SpigotPlayer implements Player
 
     private final org.bukkit.entity.Player bukkitPlayer;
 
+    /**
+     * Creates a new SpigotPlayer wrapper.
+     *
+     * @param bukkitPlayer The Bukkit Player to wrap
+     */
     public SpigotPlayer(org.bukkit.entity.Player bukkitPlayer)
     {
         this.bukkitPlayer = bukkitPlayer;
@@ -142,6 +147,11 @@ public class SpigotPlayer implements Player
         maxHealthAttribute.setBaseValue(maxHealth);
     }
 
+    /**
+     * Gets the world the player is currently in.
+     *
+     * @return The world the player is in
+     */
     public World getWorld()
     {
         // TODO: Implement SpigotWorld wrapper

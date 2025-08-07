@@ -11,7 +11,7 @@ import java.io.File
 class PistonCorePlugin : Plugin<Project> {
 
     companion object {
-        private const val PISTON_CORE_VERSION = "0.5.0"
+        private const val PISTON_CORE_VERSION = "0.6.0"
     }
 
     override fun apply(project: Project) {

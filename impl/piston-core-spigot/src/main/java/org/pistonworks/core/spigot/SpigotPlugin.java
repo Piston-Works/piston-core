@@ -14,6 +14,11 @@ public class SpigotPlugin implements PluginContainer
 
     private final JavaPlugin bukkitPlugin;
 
+    /**
+     * Creates a new SpigotPlugin wrapper.
+     *
+     * @param bukkitPlugin The JavaPlugin to wrap
+     */
     public SpigotPlugin(JavaPlugin bukkitPlugin)
     {
         this.bukkitPlugin = bukkitPlugin;

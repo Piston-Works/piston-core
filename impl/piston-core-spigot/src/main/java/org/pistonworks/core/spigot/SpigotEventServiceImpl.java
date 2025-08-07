@@ -22,6 +22,11 @@ public class SpigotEventServiceImpl extends EventServiceImpl implements Listener
 
     private final SpigotPlugin plugin;
 
+    /**
+     * Creates a new SpigotEventServiceImpl instance.
+     * 
+     * @param plugin The SpigotPlugin instance
+     */
     public SpigotEventServiceImpl(SpigotPlugin plugin)
     {
         this.plugin = plugin;
@@ -32,6 +37,11 @@ public class SpigotEventServiceImpl extends EventServiceImpl implements Listener
     // ===== BUKKIT EVENT BRIDGES =====
     // These methods simply convert Bukkit events to Piston Core events
 
+    /**
+     * Handles Bukkit PlayerJoinEvent and bridges it to Piston Core.
+     *
+     * @param bukkitEvent The Bukkit PlayerJoinEvent
+     */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent bukkitEvent)
     {
@@ -45,6 +55,11 @@ public class SpigotEventServiceImpl extends EventServiceImpl implements Listener
         bukkitEvent.setJoinMessage(pistonEvent.getJoinMessage());
     }
 
+    /**
+     * Handles Bukkit PlayerQuitEvent and bridges it to Piston Core.
+     *
+     * @param bukkitEvent The Bukkit PlayerQuitEvent
+     */
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent bukkitEvent)
     {
@@ -58,6 +73,11 @@ public class SpigotEventServiceImpl extends EventServiceImpl implements Listener
         bukkitEvent.setQuitMessage(pistonEvent.getQuitMessage());
     }
 
+    /**
+     * Handles Bukkit AsyncPlayerChatEvent and bridges it to Piston Core.
+     *
+     * @param bukkitEvent The Bukkit AsyncPlayerChatEvent
+     */
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent bukkitEvent)
     {
@@ -73,6 +93,11 @@ public class SpigotEventServiceImpl extends EventServiceImpl implements Listener
         bukkitEvent.setCancelled(pistonEvent.isCancelled());
     }
 
+    /**
+     * Handles Bukkit PlayerMoveEvent and bridges it to Piston Core.
+     *
+     * @param bukkitEvent The Bukkit PlayerMoveEvent
+     */
     @EventHandler
     public void onPlayerMove(org.bukkit.event.player.PlayerMoveEvent bukkitEvent)
     {

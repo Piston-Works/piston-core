@@ -15,6 +15,11 @@ public class SpigotWorld implements World
 
     private final org.bukkit.World bukkitWorld;
 
+    /**
+     * Creates a new SpigotWorld wrapper.
+     *
+     * @param bukkitWorld The Bukkit World to wrap
+     */
     public SpigotWorld(org.bukkit.World bukkitWorld)
     {
         this.bukkitWorld = bukkitWorld;

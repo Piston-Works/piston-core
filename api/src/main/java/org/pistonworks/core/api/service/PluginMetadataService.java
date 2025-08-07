@@ -1,5 +1,6 @@
 package org.pistonworks.core.api.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -39,9 +40,16 @@ public interface PluginMetadataService
     /**
      * Gets the plugin authors from piston-core.yml
      *
-     * @return the plugin authors
+     * @return the plugin authors as a list
      */
-    String getPluginAuthors();
+    List<String> getPluginAuthors();
+
+    /**
+     * Gets the plugin authors from piston-core.yml as a formatted string
+     *
+     * @return the plugin authors formatted as a comma-separated string
+     */
+    String getPluginAuthorsString();
 
     /**
      * Gets a specific property from piston-core.yml
@@ -54,9 +62,9 @@ public interface PluginMetadataService
     /**
      * Gets a specific property from piston-core.yml with a default value
      *
-     * @param key the property key
+     * @param key          the property key
      * @param defaultValue the default value if not found
-     * @param <T> the type of the value
+     * @param <T>          the type of the value
      * @return the property value or default value
      */
     <T> T getProperty(String key, T defaultValue);

@@ -7,12 +7,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+/**
+ * Spigot implementation of the LoggingService.
+ * Provides logging functionality using Bukkit's logging system.
+ */
 public class SpigotLoggingService implements LoggingService
 {
 
     private final Map<Class<?>, Logger> loggers = new HashMap<>();
     private final org.bukkit.plugin.Plugin plugin;
 
+    /**
+     * Creates a new SpigotLoggingService instance.
+     *
+     * @param plugin The Bukkit plugin instance
+     */
     public SpigotLoggingService(org.bukkit.plugin.Plugin plugin)
     {
         this.plugin = plugin;

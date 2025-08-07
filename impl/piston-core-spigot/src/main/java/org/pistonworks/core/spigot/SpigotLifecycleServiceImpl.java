@@ -13,6 +13,11 @@ public class SpigotLifecycleServiceImpl implements LifecycleService
 
     private final JavaPlugin plugin;
 
+    /**
+     * Creates a new SpigotLifecycleServiceImpl instance.
+     *
+     * @param plugin The JavaPlugin instance
+     */
     public SpigotLifecycleServiceImpl(JavaPlugin plugin)
     {
         this.plugin = plugin;

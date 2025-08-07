@@ -11,6 +11,10 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.InputStream;
 import java.util.Map;
 
+/**
+ * Main plugin class for PistonCore Spigot implementation.
+ * This class extends JavaPlugin and serves as the entry point for the plugin.
+ */
 public final class PistonCoreSpigotPlugin extends JavaPlugin
 {
 
@@ -21,6 +25,11 @@ public final class PistonCoreSpigotPlugin extends JavaPlugin
     private PistonPlugin userPlugin;
     private Logger logger;
 
+    /**
+     * Gets the singleton instance of the PistonCoreSpigotPlugin.
+     *
+     * @return The plugin instance
+     */
     public static PistonCoreSpigotPlugin getInstance()
     {
         return instance;
@@ -129,11 +138,21 @@ public final class PistonCoreSpigotPlugin extends JavaPlugin
         logger.info("Loaded user plugin: " + mainClassName);
     }
 
+    /**
+     * Gets the command service instance.
+     *
+     * @return The CommandService implementation
+     */
     public CommandService getCommandService()
     {
         return services.getCommandService();
     }
 
+    /**
+     * Gets the event service instance.
+     *
+     * @return The EventService implementation
+     */
     public EventService getEventService()
     {
         return services.getEventService();

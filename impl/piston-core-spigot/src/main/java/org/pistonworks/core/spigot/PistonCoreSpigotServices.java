@@ -5,6 +5,10 @@ import org.pistonworks.core.api.PistonCoreServices;
 import org.pistonworks.core.api.service.*;
 import org.pistonworks.core.common.PluginDiscoveryServiceImpl;
 
+/**
+ * Spigot implementation of PistonCoreServices.
+ * Provides all core services for the Spigot platform implementation.
+ */
 public final class PistonCoreSpigotServices implements PistonCoreServices
 {
 
@@ -17,6 +21,11 @@ public final class PistonCoreSpigotServices implements PistonCoreServices
     private final LoggingService loggingService;
     private final PluginMetadataService pluginMetadataService;
 
+    /**
+     * Creates a new PistonCoreSpigotServices instance.
+     *
+     * @param plugin The JavaPlugin instance
+     */
     public PistonCoreSpigotServices(JavaPlugin plugin)
     {
         this.plugin = plugin;
@@ -32,7 +41,11 @@ public final class PistonCoreSpigotServices implements PistonCoreServices
         this.pluginDiscoveryService = new PluginDiscoveryServiceImpl();
     }
 
-    // Additional constructor for reflection-based initialization from API
+    /**
+     * Additional constructor for reflection-based initialization from API.
+     *
+     * @param plugin The plugin instance (must be a JavaPlugin)
+     */
     public PistonCoreSpigotServices(Object plugin)
     {
         this((JavaPlugin) plugin);
