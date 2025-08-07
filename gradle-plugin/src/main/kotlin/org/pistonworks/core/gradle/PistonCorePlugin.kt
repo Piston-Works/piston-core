@@ -11,7 +11,7 @@ import java.io.File
 class PistonCorePlugin : Plugin<Project> {
 
     companion object {
-        private const val PISTON_CORE_VERSION = "0.4.1"
+        private const val PISTON_CORE_VERSION = "0.4.2"
     }
 
     override fun apply(project: Project) {
@@ -90,7 +90,7 @@ class PistonCorePlugin : Plugin<Project> {
 name: ${metadata["name"]}
 version: ${metadata["version"]}
 description: ${metadata["description"]}
-main: ${metadata["main"]}
+main: org.pistonworks.core.spigot.PistonCoreSpigotPlugin
 authors: ${metadata["authors"]}
 api-version: 1.19
 depend: []
