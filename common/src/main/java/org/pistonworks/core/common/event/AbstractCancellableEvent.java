@@ -10,11 +10,19 @@ public abstract class AbstractCancellableEvent extends AbstractEvent implements 
 
     private boolean cancelled = false;
 
+    /**
+     * Default constructor for creating an event with the current timestamp.
+     */
     protected AbstractCancellableEvent()
     {
         super();
     }
 
+    /**
+     * Constructor for creating an event with a specific event name and the current timestamp.
+     *
+     * @param eventName the name of the event
+     */
     protected AbstractCancellableEvent(String eventName)
     {
         super(eventName);

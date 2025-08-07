@@ -34,6 +34,11 @@ public final class PistonCore
         return getServices().getLoggingService();
     }
 
+    public static PluginMetadataService getPluginMetadataService()
+    {
+        return getServices().getPluginMetadataService();
+    }
+
     private static PistonCoreServices getServices()
     {
         if (services == null)

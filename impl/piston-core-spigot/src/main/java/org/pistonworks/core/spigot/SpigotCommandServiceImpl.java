@@ -189,16 +189,74 @@ public final class SpigotCommandServiceImpl implements CommandService
     @Override
     public void registerCommands(CommandHandler handler)
     {
-        // This would delegate to a CommandRegistry implementation
-        // For now, throw UnsupportedOperationException until CommandRegistry is integrated
-        throw new UnsupportedOperationException("CommandHandler registration not yet implemented in Spigot implementation");
+        // Use reflection to find @Command annotated methods
+        Class<?> clazz = handler.getClass();
+        for (java.lang.reflect.Method method : clazz.getDeclaredMethods()) {
+            if (method.isAnnotationPresent(org.pistonworks.core.api.command.Command.class)) {
+                org.pistonworks.core.api.command.Command cmdAnnotation = method.getAnnotation(org.pistonworks.core.api.command.Command.class);
+
+                // Get command name - use annotation value/name or method name
+                String commandName = cmdAnnotation.value().isEmpty() ?
+                    (cmdAnnotation.name().isEmpty() ? method.getName() : cmdAnnotation.name()) :
+                    cmdAnnotation.value();
+
+                // Create a command executor that invokes the annotated method
+                org.pistonworks.core.api.service.CommandExecutor executor = (sender, command, args) -> {
+                    try {
+                        // Get method parameters
+                        Class<?>[] paramTypes = method.getParameterTypes();
+                        Object[] methodArgs = new Object[paramTypes.length];
+
+                        // First parameter should always be CommandSender
+                        if (paramTypes.length > 0 && CommandSender.class.isAssignableFrom(paramTypes[0])) {
+                            methodArgs[0] = sender;
+
+                            // Fill remaining parameters from command arguments
+                            for (int i = 1; i < paramTypes.length && i - 1 < args.length; i++) {
+                                if (paramTypes[i] == String.class) {
+                                    methodArgs[i] = args[i - 1];
+                                } else if (paramTypes[i] == int.class || paramTypes[i] == Integer.class) {
+                                    try {
+                                        methodArgs[i] = Integer.parseInt(args[i - 1]);
+                                    } catch (NumberFormatException e) {
+                                        sender.sendMessage("Invalid number: " + args[i - 1]);
+                                        return false;
+                                    }
+                                } else {
+                                    // For now, convert everything else to String
+                                    methodArgs[i] = args[i - 1];
+                                }
+                            }
+
+                            method.setAccessible(true);
+                            method.invoke(handler, methodArgs);
+                            return true;
+                        }
+                    } catch (Exception e) {
+                        plugin.getLogger().severe("Error executing command " + commandName + ": " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                    return false;
+                };
+
+                // Register the command with metadata from annotation
+                String[] aliases = cmdAnnotation.aliases();
+                registerCommand(commandName, executor, cmdAnnotation.description(), cmdAnnotation.usage(), aliases);
+            }
+        }
     }
 
     @Override
     public void registerCommands(Class<? extends CommandHandler> handlerClass)
     {
-        // This would delegate to a CommandRegistry implementation
-        throw new UnsupportedOperationException("CommandHandler registration not yet implemented in Spigot implementation");
+        try {
+            // Create an instance of the handler class and register its commands
+            CommandHandler handler = handlerClass.getDeclaredConstructor().newInstance();
+            registerCommands(handler);
+        } catch (Exception e) {
+            plugin.getLogger().severe("Failed to create instance of command handler " + handlerClass.getName() + ": " + e.getMessage());
+            throw new RuntimeException("Failed to register commands from class " + handlerClass.getName(), e);
+        }
     }
 
     @Override
@@ -258,3 +316,4 @@ public final class SpigotCommandServiceImpl implements CommandService
         }
     }
 }
+

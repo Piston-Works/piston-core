@@ -7,7 +7,7 @@ plugins {
 // Configure all projects (including this one)
 allprojects {
     group = "org.pistonworks"
-    version = "0.4.2"
+    version = "0.5.0"
 
     apply(plugin = "java")
     apply(plugin = "java-library")

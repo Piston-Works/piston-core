@@ -147,8 +147,10 @@ other platform dependencies in your code.
 Create commands using simple annotations:
 
 ```java
+
 @Command(value = "heal", description = "Heal a player", permission = "myplugin.heal")
-public void heal(CommandSender sender, @Arg("player") String playerName) {
+public void heal(CommandSender sender, @Arg("player") String playerName)
+{
     sender.sendMessage("Healing " + playerName + "!");
 }
 ```
@@ -184,8 +186,14 @@ critical("Critical message");
 Listen to events across all platforms:
 
 ```java
-PistonCore.getEventService().registerListener(PlayerJoinEvent.class, event -> {
-    event.getPlayer().sendMessage("Welcome!");
+PistonCore.getEventService().
+
+registerListener(PlayerJoinEvent .class, event ->{
+        event.
+
+getPlayer().
+
+sendMessage("Welcome!");
 });
 ```
 

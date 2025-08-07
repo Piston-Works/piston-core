@@ -43,4 +43,11 @@ public interface PistonCoreServices
      * @return the logging service implementation
      */
     LoggingService getLoggingService();
+
+    /**
+     * Get the plugin metadata service for accessing piston-core.yml properties.
+     *
+     * @return the plugin metadata service implementation
+     */
+    PluginMetadataService getPluginMetadataService();
 }

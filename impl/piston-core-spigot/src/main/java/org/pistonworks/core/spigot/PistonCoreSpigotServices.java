@@ -15,6 +15,7 @@ public final class PistonCoreSpigotServices implements PistonCoreServices
     private final LifecycleService lifecycleService;
     private final PluginDiscoveryService pluginDiscoveryService;
     private final LoggingService loggingService;
+    private final PluginMetadataService pluginMetadataService;
 
     public PistonCoreSpigotServices(JavaPlugin plugin)
     {
@@ -24,6 +25,7 @@ public final class PistonCoreSpigotServices implements PistonCoreServices
         this.eventService = new SpigotEventServiceImpl(spigotPlugin);
         this.lifecycleService = new SpigotLifecycleServiceImpl(plugin);
         this.loggingService = new SpigotLoggingService(plugin);
+        this.pluginMetadataService = new SpigotPluginMetadataService(plugin);
 
         // Initialize plugin discovery service - no longer needs directory parameters
         // since it just manages plugin instances, not file loading
@@ -64,5 +66,11 @@ public final class PistonCoreSpigotServices implements PistonCoreServices
     public LoggingService getLoggingService()
     {
         return this.loggingService;
+    }
+
+    @Override
+    public PluginMetadataService getPluginMetadataService()
+    {
+        return this.pluginMetadataService;
     }
 }

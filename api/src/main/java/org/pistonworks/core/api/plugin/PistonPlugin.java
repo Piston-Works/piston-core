@@ -19,8 +19,8 @@ public abstract class PistonPlugin
         // Register this plugin instance
         PistonCore.getPluginDiscoveryService().discoverPlugin(this);
 
-        // Call the plugin's enable method
-        onEnable();
+        // Don't call onEnable() here - let the platform implementation control when plugins are enabled
+        // The platform-specific plugin loader (like PistonCoreSpigotPlugin) will call onEnable() at the appropriate time
     }
 
     private static synchronized void initializeCore()
