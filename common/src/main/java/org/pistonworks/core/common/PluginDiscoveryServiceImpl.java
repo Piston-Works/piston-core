@@ -14,8 +14,10 @@ public class PluginDiscoveryServiceImpl implements PluginDiscoveryService
     private final List<PistonPlugin> loadedPlugins = new ArrayList<>();
 
     @Override
-    public void discoverPlugin(PistonPlugin plugin) {
-        if (!loadedPlugins.contains(plugin)) {
+    public void discoverPlugin(PistonPlugin plugin)
+    {
+        if (!loadedPlugins.contains(plugin))
+        {
             loadedPlugins.add(plugin);
         }
     }

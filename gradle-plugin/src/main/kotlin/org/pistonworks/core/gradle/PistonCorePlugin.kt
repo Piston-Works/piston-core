@@ -2,16 +2,16 @@ package org.pistonworks.core.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
-import org.gradle.api.tasks.bundling.Jar
+import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.bundling.Jar
 import org.yaml.snakeyaml.Yaml
 import java.io.File
 
 class PistonCorePlugin : Plugin<Project> {
 
     companion object {
-        private const val PISTON_CORE_VERSION = "0.4.0"
+        private const val PISTON_CORE_VERSION = "0.4.1"
     }
 
     override fun apply(project: Project) {
@@ -61,6 +61,7 @@ class PistonCorePlugin : Plugin<Project> {
         spigotTask.group = "piston core"
         spigotTask.description = "Builds Spigot version of the plugin"
         spigotTask.archiveClassifier.set("spigot")
+        spigotTask.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
         val sourceSets = project.extensions.getByName("sourceSets") as SourceSetContainer
         spigotTask.from(sourceSets.getByName("main").output)
@@ -84,7 +85,8 @@ class PistonCorePlugin : Plugin<Project> {
             outputDir.mkdirs()
             val pluginYml = File(outputDir, "plugin.yml")
 
-            pluginYml.writeText("""
+            pluginYml.writeText(
+                """
 name: ${metadata["name"]}
 version: ${metadata["version"]}
 description: ${metadata["description"]}
@@ -92,7 +94,8 @@ main: ${metadata["main"]}
 authors: ${metadata["authors"]}
 api-version: 1.19
 depend: []
-""".trimIndent())
+""".trimIndent()
+            )
 
             spigotTask.from(outputDir)
         }
@@ -103,6 +106,7 @@ depend: []
         fabricTask.group = "piston core"
         fabricTask.description = "Builds Fabric version of the plugin"
         fabricTask.archiveClassifier.set("fabric")
+        fabricTask.duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
         val sourceSets = project.extensions.getByName("sourceSets") as SourceSetContainer
         fabricTask.from(sourceSets.getByName("main").output)
@@ -119,7 +123,8 @@ depend: []
             outputDir.mkdirs()
             val fabricJson = File(outputDir, "fabric.mod.json")
 
-            fabricJson.writeText("""
+            fabricJson.writeText(
+                """
 {
   "schemaVersion": 1,
   "id": "${(metadata["name"] as String).lowercase()}",
@@ -135,7 +140,8 @@ depend: []
     "minecraft": ">=1.19"
   }
 }
-""".trimIndent())
+""".trimIndent()
+            )
 
             fabricTask.from(outputDir)
         }

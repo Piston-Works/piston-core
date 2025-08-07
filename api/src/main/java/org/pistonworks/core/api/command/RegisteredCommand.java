@@ -20,8 +20,8 @@ class RegisteredCommand
     private final Map<String, Method> completionMethods;
 
     RegisteredCommand(CommandHandler handler, Method method, Command annotation,
-                     List<CommandInfo.ArgumentInfo> arguments, DefaultCommandRegistry registry,
-                     Map<String, Method> completionMethods)
+                      List<CommandInfo.ArgumentInfo> arguments, DefaultCommandRegistry registry,
+                      Map<String, Method> completionMethods)
     {
         this.handler = handler;
         this.method = method;
@@ -37,7 +37,7 @@ class RegisteredCommand
         if (!annotation.permission().isEmpty() && !sender.hasPermission(annotation.permission()))
         {
             handler.onCommandError(sender, commandName,
-                new CommandError(CommandError.ErrorType.NO_PERMISSION, "No permission"));
+                    new CommandError(CommandError.ErrorType.NO_PERMISSION, "No permission"));
             return false;
         }
 
@@ -45,14 +45,14 @@ class RegisteredCommand
         if (annotation.playerOnly() && sender instanceof ConsoleCommandSender)
         {
             handler.onCommandError(sender, commandName,
-                new CommandError(CommandError.ErrorType.PLAYER_ONLY, "Players only"));
+                    new CommandError(CommandError.ErrorType.PLAYER_ONLY, "Players only"));
             return false;
         }
 
         if (annotation.consoleOnly() && !(sender instanceof ConsoleCommandSender))
         {
             handler.onCommandError(sender, commandName,
-                new CommandError(CommandError.ErrorType.CONSOLE_ONLY, "Console only"));
+                    new CommandError(CommandError.ErrorType.CONSOLE_ONLY, "Console only"));
             return false;
         }
 
@@ -79,11 +79,10 @@ class RegisteredCommand
             handler.onAfterCommand(sender, commandName, args);
 
             return true;
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             handler.onCommandError(sender, commandName,
-                new CommandError(CommandError.ErrorType.EXECUTION_ERROR, e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
+                    new CommandError(CommandError.ErrorType.EXECUTION_ERROR, e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
             return false;
         }
     }
@@ -104,22 +103,22 @@ class RegisteredCommand
 
         // Filter completions that start with the current input
         return completions.stream()
-            .filter(completion -> completion.toLowerCase().startsWith(currentArg.toLowerCase()))
-            .sorted()
-            .collect(Collectors.toList());
+                .filter(completion -> completion.toLowerCase().startsWith(currentArg.toLowerCase()))
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     CommandInfo getCommandInfo()
     {
         return new CommandInfo(
-            annotation.name().isEmpty() ? method.getName() : annotation.name(),
-            Arrays.asList(annotation.aliases()),
-            annotation.description(),
-            generateUsage(),
-            annotation.permission(),
-            annotation.playerOnly(),
-            annotation.consoleOnly(),
-            arguments
+                annotation.name().isEmpty() ? method.getName() : annotation.name(),
+                Arrays.asList(annotation.aliases()),
+                annotation.description(),
+                generateUsage(),
+                annotation.permission(),
+                annotation.playerOnly(),
+                annotation.consoleOnly(),
+                arguments
         );
     }
 
@@ -141,30 +140,28 @@ class RegisteredCommand
                     if (defaultValue == null && !argInfo.getDefaultValue().isEmpty())
                     {
                         handler.onCommandError(sender, commandName,
-                            new CommandError(CommandError.ErrorType.INVALID_ARGUMENTS,
-                                "Invalid default value for argument: " + argInfo.getName(), generateUsage()));
+                                new CommandError(CommandError.ErrorType.INVALID_ARGUMENTS,
+                                        "Invalid default value for argument: " + argInfo.getName(), generateUsage()));
                         return null;
                     }
                     parsedArgs.add(defaultValue);
-                }
-                else
+                } else
                 {
                     // Required argument missing
                     handler.onCommandError(sender, commandName,
-                        new CommandError(CommandError.ErrorType.INVALID_ARGUMENTS,
-                            "Missing required argument: " + argInfo.getName(), generateUsage()));
+                            new CommandError(CommandError.ErrorType.INVALID_ARGUMENTS,
+                                    "Missing required argument: " + argInfo.getName(), generateUsage()));
                     return null;
                 }
-            }
-            else
+            } else
             {
                 // Parse the provided argument
                 Object parsedArg = parseArgument(argInfo.getType(), args[i]);
                 if (parsedArg == null && !args[i].isEmpty())
                 {
                     handler.onCommandError(sender, commandName,
-                        new CommandError(CommandError.ErrorType.INVALID_ARGUMENTS,
-                            "Invalid " + argInfo.getType().getSimpleName() + " for argument: " + argInfo.getName(), generateUsage()));
+                            new CommandError(CommandError.ErrorType.INVALID_ARGUMENTS,
+                                    "Invalid " + argInfo.getType().getSimpleName() + " for argument: " + argInfo.getName(), generateUsage()));
                     return null;
                 }
                 parsedArgs.add(parsedArg);
@@ -186,33 +183,26 @@ class RegisteredCommand
             if (type == String.class)
             {
                 return value;
-            }
-            else if (type == int.class || type == Integer.class)
+            } else if (type == int.class || type == Integer.class)
             {
                 return Integer.parseInt(value);
-            }
-            else if (type == double.class || type == Double.class)
+            } else if (type == double.class || type == Double.class)
             {
                 return Double.parseDouble(value);
-            }
-            else if (type == float.class || type == Float.class)
+            } else if (type == float.class || type == Float.class)
             {
                 return Float.parseFloat(value);
-            }
-            else if (type == long.class || type == Long.class)
+            } else if (type == long.class || type == Long.class)
             {
                 return Long.parseLong(value);
-            }
-            else if (type == boolean.class || type == Boolean.class)
+            } else if (type == boolean.class || type == Boolean.class)
             {
                 return Boolean.parseBoolean(value);
-            }
-            else
+            } else
             {
                 return value; // Default to string for unknown types
             }
-        }
-        catch (NumberFormatException e)
+        } catch (NumberFormatException e)
         {
             return null;
         }
@@ -229,7 +219,7 @@ class RegisteredCommand
     }
 
     private List<String> getCompletionsForArgument(CommandSender sender, String commandName, String[] args,
-                                                  CommandInfo.ArgumentInfo argInfo, String currentArg)
+                                                   CommandInfo.ArgumentInfo argInfo, String currentArg)
     {
         // Check for method-based completions first
         if (argInfo.getCompletionType() == Arg.CompletionType.METHOD && !argInfo.getCompletionMethod().isEmpty())
@@ -250,8 +240,7 @@ class RegisteredCommand
                             return stringList;
                         }
                     }
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                     // Log error and fall back to empty list
                     return Collections.emptyList();
@@ -274,15 +263,16 @@ class RegisteredCommand
         }
 
         // Built-in completion types
-        return switch (argInfo.getCompletionType()) {
+        return switch (argInfo.getCompletionType())
+        {
             case BOOLEAN -> Arrays.asList("true", "false");
             case PLAYER, ONLINE_PLAYER ->
                 // These would be implemented by the platform-specific implementation
                 // For now, return empty list
-                Collections.emptyList();
+                    Collections.emptyList();
             case WORLD ->
                 // Platform-specific implementation needed
-                Collections.emptyList();
+                    Collections.emptyList();
             default -> Collections.emptyList();
         };
     }
@@ -303,8 +293,7 @@ class RegisteredCommand
             if (arg.isOptional())
             {
                 usage.append("[").append(arg.getName()).append("]");
-            }
-            else
+            } else
             {
                 usage.append("<").append(arg.getName()).append(">");
             }

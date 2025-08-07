@@ -13,9 +13,9 @@ public interface TabCompleter
     /**
      * Returns a list of possible completions for the given context.
      *
-     * @param sender the command sender requesting completions
-     * @param command the command being completed
-     * @param args the current arguments (the last one being partially typed)
+     * @param sender     the command sender requesting completions
+     * @param command    the command being completed
+     * @param args       the current arguments (the last one being partially typed)
      * @param currentArg the argument currently being completed
      * @return list of possible completions, or empty list if none
      */

@@ -3,13 +3,16 @@ package org.pistonworks.core.api.plugin;
 import org.pistonworks.core.api.PistonCore;
 import org.pistonworks.core.api.logging.Logger;
 
-public abstract class PistonPlugin {
+public abstract class PistonPlugin
+{
 
     private static boolean coreInitialized = false;
 
-    public PistonPlugin() {
+    public PistonPlugin()
+    {
         // Only initialize Piston Core once, and do it lazily when services are accessed
-        if (!coreInitialized) {
+        if (!coreInitialized)
+        {
             initializeCore();
         }
 
@@ -20,8 +23,10 @@ public abstract class PistonPlugin {
         onEnable();
     }
 
-    private static synchronized void initializeCore() {
-        if (!coreInitialized) {
+    private static synchronized void initializeCore()
+    {
+        if (!coreInitialized)
+        {
             // Platform detection and initialization happens in PistonCore.getServices()
             coreInitialized = true;
         }
@@ -35,7 +40,8 @@ public abstract class PistonPlugin {
     /**
      * Called when the plugin is disabled.
      */
-    public void onDisable() {
+    public void onDisable()
+    {
         // Default implementation is empty
     }
 
@@ -44,7 +50,8 @@ public abstract class PistonPlugin {
      *
      * @return the logger
      */
-    public Logger getLogger() {
+    public Logger getLogger()
+    {
         return PistonCore.getLoggingService().getLogger(this.getClass());
     }
 }

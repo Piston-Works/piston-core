@@ -16,10 +16,12 @@ public class PluginMetadata
     private List<String> dependencies;
     private String apiVersion;
 
-    public PluginMetadata() {}
+    public PluginMetadata()
+    {
+    }
 
     public PluginMetadata(String name, String version, String description, String mainClass,
-                         List<String> authors, List<String> dependencies, String apiVersion)
+                          List<String> authors, List<String> dependencies, String apiVersion)
     {
         this.name = name;
         this.version = version;

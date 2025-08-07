@@ -7,7 +7,7 @@ plugins {
 // Configure all projects (including this one)
 allprojects {
     group = "org.pistonworks"
-    version = "0.4.0"
+    version = "0.4.1"
 
     apply(plugin = "java")
     apply(plugin = "java-library")
@@ -41,48 +41,50 @@ allprojects {
         useJUnitPlatform()
     }
 
-    // Configure publishing for all projects
-    publishing {
-        publications {
-            create<MavenPublication>("maven") {
-                from(components["java"])
+    // Configure publishing for all projects except gradle-plugin
+    if (project.name != "gradle-plugin") {
+        publishing {
+            publications {
+                create<MavenPublication>("maven") {
+                    from(components["java"])
 
-                pom {
-                    name.set(project.name)
-                    description.set("Piston Core is a cross-platform API for building Minecraft server-side mods/plugins")
-                    url.set("https://github.com/Piston-Works/piston-core")
-
-                    licenses {
-                        license {
-                            name.set("GNU General Public License v3.0")
-                            url.set("https://opensource.org/licenses/GPL-3.0")
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id.set("alecj")
-                            name.set("Alec Jensen")
-                            email.set("alec@alecj.com")
-                        }
-                    }
-
-                    scm {
-                        connection.set("scm:git:git://github.com/Piston-Works/piston-core.git")
-                        developerConnection.set("scm:git:ssh://github.com/Piston-Works/piston-core.git")
+                    pom {
+                        name.set(project.name)
+                        description.set("Piston Core is a cross-platform API for building Minecraft server-side mods/plugins")
                         url.set("https://github.com/Piston-Works/piston-core")
+
+                        licenses {
+                            license {
+                                name.set("GNU General Public License v3.0")
+                                url.set("https://opensource.org/licenses/GPL-3.0")
+                            }
+                        }
+
+                        developers {
+                            developer {
+                                id.set("alecj")
+                                name.set("Alec Jensen")
+                                email.set("alec@alecj.com")
+                            }
+                        }
+
+                        scm {
+                            connection.set("scm:git:git://github.com/Piston-Works/piston-core.git")
+                            developerConnection.set("scm:git:ssh://github.com/Piston-Works/piston-core.git")
+                            url.set("https://github.com/Piston-Works/piston-core")
+                        }
                     }
                 }
             }
-        }
 
-        repositories {
-            maven {
-                name = "nexus"
-                url = uri("https://nexus.alecj.tk/repository/maven-releases/")
-                credentials {
-                    username = findProperty("nexusUsername") as String? ?: System.getenv("NEXUS_USERNAME")
-                    password = findProperty("nexusPassword") as String? ?: System.getenv("NEXUS_PASSWORD")
+            repositories {
+                maven {
+                    name = "nexus"
+                    url = uri("https://nexus.alecj.tk/repository/maven-releases/")
+                    credentials {
+                        username = findProperty("nexusUsername") as String? ?: System.getenv("NEXUS_USERNAME")
+                        password = findProperty("nexusPassword") as String? ?: System.getenv("NEXUS_PASSWORD")
+                    }
                 }
             }
         }

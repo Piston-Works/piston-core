@@ -1,11 +1,7 @@
 package org.pistonworks.core.api;
 
 import org.pistonworks.core.api.plugin.PistonPlugin;
-import org.pistonworks.core.api.service.CommandService;
-import org.pistonworks.core.api.service.EventService;
-import org.pistonworks.core.api.service.LifecycleService;
-import org.pistonworks.core.api.service.LoggingService;
-import org.pistonworks.core.api.service.PluginDiscoveryService;
+import org.pistonworks.core.api.service.*;
 
 // The central access point for all Piston Core services.
 public final class PistonCore
@@ -33,7 +29,8 @@ public final class PistonCore
         return getServices().getPluginDiscoveryService();
     }
 
-    public static LoggingService getLoggingService() {
+    public static LoggingService getLoggingService()
+    {
         return getServices().getLoggingService();
     }
 
@@ -66,6 +63,7 @@ public final class PistonCore
     /**
      * Initialize the plugin automatically when Piston Core is first accessed.
      * This is called automatically when the plugin JAR is loaded.
+     *
      * @param plugin The plugin instance to initialize.
      */
     public static void autoInitialize(PistonPlugin plugin)
@@ -74,8 +72,7 @@ public final class PistonCore
         try
         {
             getServices().getPluginDiscoveryService().discoverPlugin(plugin);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             System.err.println("Failed to auto-initialize plugin: " + e.getMessage());
         }

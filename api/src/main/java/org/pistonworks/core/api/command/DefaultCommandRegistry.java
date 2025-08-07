@@ -22,9 +22,9 @@ public class DefaultCommandRegistry implements CommandRegistry
     {
         // Register built-in tab completers
         registerTabCompleter("boolean", (sender, command, args, currentArg) ->
-            Arrays.asList("true", "false").stream()
-                .filter(s -> s.toLowerCase().startsWith(currentArg.toLowerCase()))
-                .collect(Collectors.toList()));
+                Arrays.asList("true", "false").stream()
+                        .filter(s -> s.toLowerCase().startsWith(currentArg.toLowerCase()))
+                        .collect(Collectors.toList()));
     }
 
     @Override
@@ -63,8 +63,7 @@ public class DefaultCommandRegistry implements CommandRegistry
         {
             CommandHandler handler = handlerClass.getDeclaredConstructor().newInstance();
             registerCommands(handler);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             throw new RuntimeException("Failed to instantiate command handler: " + handlerClass.getName(), e);
         }
@@ -83,7 +82,8 @@ public class DefaultCommandRegistry implements CommandRegistry
     @Override
     public void unregisterCommands(Class<? extends CommandHandler> handlerClass)
     {
-        handlerCommands.entrySet().removeIf(entry -> {
+        handlerCommands.entrySet().removeIf(entry ->
+        {
             if (entry.getKey().getClass().equals(handlerClass))
             {
                 entry.getValue().forEach(commands::remove);
@@ -106,7 +106,8 @@ public class DefaultCommandRegistry implements CommandRegistry
         if (parts.length == 0) return false;
 
         String commandName = parts[0].toLowerCase();
-        if (commandName.startsWith("/")) {
+        if (commandName.startsWith("/"))
+        {
             commandName = commandName.substring(1);
         }
 
@@ -118,11 +119,10 @@ public class DefaultCommandRegistry implements CommandRegistry
         try
         {
             return registeredCommand.execute(sender, commandName, args);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             registeredCommand.handler.onCommandError(sender, commandName,
-                new CommandError(CommandError.ErrorType.EXECUTION_ERROR, e.getMessage()));
+                    new CommandError(CommandError.ErrorType.EXECUTION_ERROR, e.getMessage()));
             return false;
         }
     }
@@ -134,7 +134,8 @@ public class DefaultCommandRegistry implements CommandRegistry
         if (parts.length == 0) return Collections.emptyList();
 
         String commandName = parts[0].toLowerCase();
-        if (commandName.startsWith("/")) {
+        if (commandName.startsWith("/"))
+        {
             commandName = commandName.substring(1);
         }
 
@@ -145,9 +146,9 @@ public class DefaultCommandRegistry implements CommandRegistry
         if (parts.length == 1 && !commandLine.endsWith(" "))
         {
             return commands.keySet().stream()
-                .filter(cmd -> cmd.startsWith(finalCommandName))
-                .sorted()
-                .collect(Collectors.toList());
+                    .filter(cmd -> cmd.startsWith(finalCommandName))
+                    .sorted()
+                    .collect(Collectors.toList());
         }
 
         RegisteredCommand registeredCommand = commands.get(finalCommandName);
@@ -200,13 +201,13 @@ public class DefaultCommandRegistry implements CommandRegistry
             }
 
             arguments.add(new CommandInfo.ArgumentInfo(
-                argAnnotation.value(),
-                param.getType(),
-                argAnnotation.optional(),
-                argAnnotation.defaultValue(),
-                argAnnotation.completionType(),
-                Arrays.asList(argAnnotation.completions()),
-                argAnnotation.completionMethod()
+                    argAnnotation.value(),
+                    param.getType(),
+                    argAnnotation.optional(),
+                    argAnnotation.defaultValue(),
+                    argAnnotation.completionType(),
+                    Arrays.asList(argAnnotation.completions()),
+                    argAnnotation.completionMethod()
             ));
         }
 
@@ -225,9 +226,11 @@ public class DefaultCommandRegistry implements CommandRegistry
         return new RegisteredCommand(handler, method, cmdAnnotation, arguments, this, completionMethods);
     }
 
-    private String getCommandName(Command cmdAnnotation, String methodName) {
+    private String getCommandName(Command cmdAnnotation, String methodName)
+    {
         String name = cmdAnnotation.name();
-        if (!name.isEmpty()) {
+        if (!name.isEmpty())
+        {
             return name;
         }
         return methodName;

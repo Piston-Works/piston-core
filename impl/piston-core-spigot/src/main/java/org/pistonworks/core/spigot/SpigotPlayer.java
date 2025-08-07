@@ -3,9 +3,9 @@ package org.pistonworks.core.spigot;
 import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.pistonworks.core.api.model.entity.Player;
 import org.pistonworks.core.api.model.Position;
 import org.pistonworks.core.api.model.World;
+import org.pistonworks.core.api.model.entity.Player;
 
 import java.util.UUID;
 
@@ -129,17 +129,17 @@ public class SpigotPlayer implements Player
     }
 
     @Override
-    public void setMaxHealth(double maxHealth)
-    {
-        AttributeInstance maxHealthAttribute = ((Attributable) bukkitPlayer).getAttribute(Attribute.MAX_HEALTH);
-        maxHealthAttribute.setBaseValue(maxHealth);
-    }
-
-    @Override
     public double getMaxHealth()
     {
         AttributeInstance maxHealthAttribute = ((Attributable) bukkitPlayer).getAttribute(Attribute.MAX_HEALTH);
         return maxHealthAttribute.getBaseValue();
+    }
+
+    @Override
+    public void setMaxHealth(double maxHealth)
+    {
+        AttributeInstance maxHealthAttribute = ((Attributable) bukkitPlayer).getAttribute(Attribute.MAX_HEALTH);
+        maxHealthAttribute.setBaseValue(maxHealth);
     }
 
     public World getWorld()

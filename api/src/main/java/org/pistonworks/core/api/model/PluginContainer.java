@@ -5,7 +5,8 @@ import java.io.File;
 /**
  * Represents a container for a plugin, holding its metadata and instance.
  */
-public interface PluginContainer {
+public interface PluginContainer
+{
 
     /**
      * Gets the name of this plugin.

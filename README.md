@@ -28,7 +28,8 @@ pluginManagement {
 rootProject.name = "your-plugin-name"
 ```
 
-**Important:** The `pluginManagement` block must be at the top of your `settings.gradle.kts` file, before any other configuration.
+**Important:** The `pluginManagement` block must be at the top of your `settings.gradle.kts` file, before any other
+configuration.
 
 ### 2. Add the Gradle Plugin
 
@@ -55,48 +56,33 @@ package com.example;
 
 import org.pistonworks.core.api.PistonCore;
 import org.pistonworks.core.api.command.Command;
-import org.pistonworks.core.api.command.CommandContext;
+import org.pistonworks.core.api.command.CommandHandler;
+import org.pistonworks.core.api.command.Arg;
 import org.pistonworks.core.api.event.EventListener;
 import org.pistonworks.core.api.event.player.PlayerJoinEvent;
+import org.pistonworks.core.api.model.CommandSender;
 import org.pistonworks.core.api.plugin.PistonPlugin;
 
 /**
  * Example plugin that demonstrates zero platform-specific code.
  * This plugin will work on ANY platform - Spigot, Fabric, Forge, Velocity, etc.
  */
-public class MyPlugin extends PistonPlugin {
+public class MyPlugin extends PistonPlugin
+{
 
     @Override
-    public void onEnable() {
-        // Register commands using the platform-agnostic API
-        PistonCore.getCommandService().registerCommand(new Command() {
-            @Override
-            public String getName() {
-                return "heal";
-            }
+    public void onEnable()
+    {
+        // Register command handler - completely platform agnostic
+        PistonCore.getCommandService().registerHandler(new MyCommands());
 
+        // Register event listener - completely platform agnostic
+        PistonCore.getEventService().registerListener(PlayerJoinEvent.class, new EventListener<PlayerJoinEvent>()
+        {
             @Override
-            public String getDescription() {
-                return "Heal yourself or another player";
-            }
-
-            @Override
-            public void execute(CommandContext context) {
-                context.getSender().sendMessage("You have been healed!");
-                // Implementation would go here
-            }
-        });
-
-        // Register event listeners - completely platform agnostic
-        PistonCore.getEventService().registerListener(new EventListener<PlayerJoinEvent>() {
-            @Override
-            public void onEvent(PlayerJoinEvent event) {
+            public void handle(PlayerJoinEvent event)
+            {
                 event.getPlayer().sendMessage("Welcome to the server, " + event.getPlayer().getName() + "!");
-            }
-
-            @Override
-            public Class<PlayerJoinEvent> getEventType() {
-                return PlayerJoinEvent.class;
             }
         });
 
@@ -105,8 +91,35 @@ public class MyPlugin extends PistonPlugin {
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable()
+    {
         getLogger().info("MyPlugin has been disabled!");
+    }
+
+    /**
+     * Command handler class using annotation-based commands
+     */
+    public static class MyCommands extends CommandHandler
+    {
+
+        @Command(value = "heal", description = "Heal yourself or another player", permission = "myplugin.heal")
+        public void heal(CommandSender sender,
+                         @Arg(value = "player", optional = true) String playerName,
+                         @Arg(value = "amount", optional = true, defaultValue = "20") int amount)
+        {
+
+            String target = playerName != null ? playerName : sender.getName();
+            sender.sendMessage("Healing " + target + " for " + amount + " health!");
+            // Implementation would go here
+        }
+
+        @Command(value = "broadcast", aliases = {"bc"}, description = "Broadcast a message")
+        public void broadcast(CommandSender sender, @Arg("message") String message)
+        {
+            // Broadcast to all players
+            sender.sendMessage("Broadcasting: " + message);
+            // Implementation would go here
+        }
     }
 }
 ```
@@ -117,7 +130,7 @@ The beauty of Piston Core is that **your plugin code is 100% platform-independen
 
 - **Spigot/Paper/Bukkit**: Drop into plugins folder
 - **Fabric**: Install as a mod
-- **Forge**: Install as a mod  
+- **Forge**: Install as a mod
 - **Velocity**: Drop into plugins folder
 
 No platform-specific code required! Piston Core handles all the platform differences for you.
@@ -125,29 +138,57 @@ No platform-specific code required! Piston Core handles all the platform differe
 ## Key Features
 
 ### ✅ Zero Platform-Specific Code
-Your plugins extend `PistonPlugin` instead of platform-specific base classes. No more `JavaPlugin`, `ModInitializer`, or other platform dependencies in your code.
+
+Your plugins extend `PistonPlugin` instead of platform-specific base classes. No more `JavaPlugin`, `ModInitializer`, or
+other platform dependencies in your code.
+
+### ✅ Annotation-Based Commands
+
+Create commands using simple annotations:
+
+```java
+@Command(value = "heal", description = "Heal a player", permission = "myplugin.heal")
+public void heal(CommandSender sender, @Arg("player") String playerName) {
+    sender.sendMessage("Healing " + playerName + "!");
+}
+```
 
 ### ✅ Unified Logging
+
 Use the built-in logger with standard levels:
+
 ```java
-getLogger().debug("Debug message");
-getLogger().info("Info message");  
-getLogger().warn("Warning message");
-getLogger().error("Error message");
-getLogger().critical("Critical message");
+getLogger().
+
+debug("Debug message");
+
+getLogger().
+
+info("Info message");
+
+getLogger().
+
+warn("Warning message");
+
+getLogger().
+
+error("Error message");
+
+getLogger().
+
+critical("Critical message");
 ```
 
-### ✅ Cross-Platform Commands
-Register commands that work everywhere:
-```java
-PistonCore.getCommandService().registerCommand(myCommand);
-```
+### ✅ Simple Event Handling
 
-### ✅ Universal Events
 Listen to events across all platforms:
+
 ```java
-PistonCore.getEventService().registerListener(myListener);
+PistonCore.getEventService().registerListener(PlayerJoinEvent.class, event -> {
+    event.getPlayer().sendMessage("Welcome!");
+});
 ```
 
 ### ✅ Automatic Initialization
+
 No need to manually initialize Piston Core - it happens automatically when you extend `PistonPlugin`.

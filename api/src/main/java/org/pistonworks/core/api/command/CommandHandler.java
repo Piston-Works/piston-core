@@ -5,7 +5,7 @@ import org.pistonworks.core.api.model.CommandSender;
 /**
  * Base class for command handlers. Extend this class and use @Command annotations
  * on methods to create commands with minimal boilerplate.
- *
+ * <p>
  * Example usage:
  * <pre>{@code
  * public class MyCommands extends CommandHandler {
@@ -29,9 +29,9 @@ public abstract class CommandHandler
      * Called when a command execution fails due to invalid arguments, permissions, etc.
      * Override this method to customize error handling.
      *
-     * @param sender the command sender
+     * @param sender  the command sender
      * @param command the command that failed
-     * @param error the error that occurred
+     * @param error   the error that occurred
      */
     protected void onCommandError(CommandSender sender, String command, CommandError error)
     {
@@ -62,9 +62,9 @@ public abstract class CommandHandler
      * Called before any command in this handler is executed.
      * Return false to prevent the command from executing.
      *
-     * @param sender the command sender
+     * @param sender  the command sender
      * @param command the command being executed
-     * @param args the command arguments
+     * @param args    the command arguments
      * @return true to allow execution, false to prevent it
      */
     protected boolean onBeforeCommand(CommandSender sender, String command, String[] args)
@@ -75,9 +75,9 @@ public abstract class CommandHandler
     /**
      * Called after a command in this handler is successfully executed.
      *
-     * @param sender the command sender
+     * @param sender  the command sender
      * @param command the command that was executed
-     * @param args the command arguments
+     * @param args    the command arguments
      */
     protected void onAfterCommand(CommandSender sender, String command, String[] args)
     {

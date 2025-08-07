@@ -17,7 +17,7 @@ public class CommandInfo
     private final List<ArgumentInfo> arguments;
 
     public CommandInfo(String name, List<String> aliases, String description, String usage,
-                      String permission, boolean playerOnly, boolean consoleOnly, List<ArgumentInfo> arguments)
+                       String permission, boolean playerOnly, boolean consoleOnly, List<ArgumentInfo> arguments)
     {
         this.name = name;
         this.aliases = aliases;
@@ -29,14 +29,45 @@ public class CommandInfo
         this.arguments = arguments;
     }
 
-    public String getName() { return name; }
-    public List<String> getAliases() { return aliases; }
-    public String getDescription() { return description; }
-    public String getUsage() { return usage; }
-    public String getPermission() { return permission; }
-    public boolean isPlayerOnly() { return playerOnly; }
-    public boolean isConsoleOnly() { return consoleOnly; }
-    public List<ArgumentInfo> getArguments() { return arguments; }
+    public String getName()
+    {
+        return name;
+    }
+
+    public List<String> getAliases()
+    {
+        return aliases;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public String getUsage()
+    {
+        return usage;
+    }
+
+    public String getPermission()
+    {
+        return permission;
+    }
+
+    public boolean isPlayerOnly()
+    {
+        return playerOnly;
+    }
+
+    public boolean isConsoleOnly()
+    {
+        return consoleOnly;
+    }
+
+    public List<ArgumentInfo> getArguments()
+    {
+        return arguments;
+    }
 
     /**
      * Information about a command argument.
@@ -52,7 +83,7 @@ public class CommandInfo
         private final String completionMethod;
 
         public ArgumentInfo(String name, Class<?> type, boolean optional, String defaultValue,
-                           Arg.CompletionType completionType, List<String> completions, String completionMethod)
+                            Arg.CompletionType completionType, List<String> completions, String completionMethod)
         {
             this.name = name;
             this.type = type;
@@ -63,12 +94,39 @@ public class CommandInfo
             this.completionMethod = completionMethod;
         }
 
-        public String getName() { return name; }
-        public Class<?> getType() { return type; }
-        public boolean isOptional() { return optional; }
-        public String getDefaultValue() { return defaultValue; }
-        public Arg.CompletionType getCompletionType() { return completionType; }
-        public List<String> getCompletions() { return completions; }
-        public String getCompletionMethod() { return completionMethod; }
+        public String getName()
+        {
+            return name;
+        }
+
+        public Class<?> getType()
+        {
+            return type;
+        }
+
+        public boolean isOptional()
+        {
+            return optional;
+        }
+
+        public String getDefaultValue()
+        {
+            return defaultValue;
+        }
+
+        public Arg.CompletionType getCompletionType()
+        {
+            return completionType;
+        }
+
+        public List<String> getCompletions()
+        {
+            return completions;
+        }
+
+        public String getCompletionMethod()
+        {
+            return completionMethod;
+        }
     }
 }

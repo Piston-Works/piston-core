@@ -43,7 +43,7 @@ public interface CommandRegistry
     /**
      * Registers a custom tab completer for a specific argument type.
      *
-     * @param type the argument type (e.g., "player", "world")
+     * @param type      the argument type (e.g., "player", "world")
      * @param completer the tab completer
      */
     void registerTabCompleter(String type, TabCompleter completer);
@@ -51,7 +51,7 @@ public interface CommandRegistry
     /**
      * Executes a command with automatic argument parsing and validation.
      *
-     * @param sender the command sender
+     * @param sender      the command sender
      * @param commandLine the full command line
      * @return true if the command was executed successfully
      */
@@ -60,7 +60,7 @@ public interface CommandRegistry
     /**
      * Gets tab completions for a command.
      *
-     * @param sender the command sender
+     * @param sender      the command sender
      * @param commandLine the current command line being typed
      * @return list of possible completions
      */

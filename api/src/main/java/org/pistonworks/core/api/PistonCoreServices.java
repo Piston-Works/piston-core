@@ -1,10 +1,6 @@
 package org.pistonworks.core.api;
 
-import org.pistonworks.core.api.service.CommandService;
-import org.pistonworks.core.api.service.EventService;
-import org.pistonworks.core.api.service.LifecycleService;
-import org.pistonworks.core.api.service.PluginDiscoveryService;
-import org.pistonworks.core.api.service.LoggingService;
+import org.pistonworks.core.api.service.*;
 
 /**
  * Main services interface that all platform implementations must provide.

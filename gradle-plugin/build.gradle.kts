@@ -1,6 +1,7 @@
 plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
+    `maven-publish`
 }
 
 gradlePlugin {
@@ -23,3 +24,16 @@ dependencies {
     implementation("org.yaml:snakeyaml:2.0")
 }
 
+// Configure publishing for gradle plugin
+publishing {
+    repositories {
+        maven {
+            name = "nexus"
+            url = uri("https://nexus.alecj.tk/repository/maven-releases/")
+            credentials {
+                username = findProperty("nexusUsername") as String? ?: System.getenv("NEXUS_USERNAME")
+                password = findProperty("nexusPassword") as String? ?: System.getenv("NEXUS_PASSWORD")
+            }
+        }
+    }
+}

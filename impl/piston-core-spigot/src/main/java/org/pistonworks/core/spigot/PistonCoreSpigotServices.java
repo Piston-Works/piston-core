@@ -2,11 +2,7 @@ package org.pistonworks.core.spigot;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.pistonworks.core.api.PistonCoreServices;
-import org.pistonworks.core.api.service.CommandService;
-import org.pistonworks.core.api.service.EventService;
-import org.pistonworks.core.api.service.LifecycleService;
-import org.pistonworks.core.api.service.LoggingService;
-import org.pistonworks.core.api.service.PluginDiscoveryService;
+import org.pistonworks.core.api.service.*;
 import org.pistonworks.core.common.PluginDiscoveryServiceImpl;
 
 public final class PistonCoreSpigotServices implements PistonCoreServices
@@ -65,7 +61,8 @@ public final class PistonCoreSpigotServices implements PistonCoreServices
     }
 
     @Override
-    public LoggingService getLoggingService() {
+    public LoggingService getLoggingService()
+    {
         return this.loggingService;
     }
 }
